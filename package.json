@@ -1,0 +1,29 @@
+{
+  "title": "min-vid",
+  "name": "min-vid",
+  "version": "0.0.1",
+  "private": true,
+  "description": "minimize web videos",
+  "homepage": "https://github.com/meandavejustice/min-vid",
+  "repository": "meandavejustice/min-vid",
+  "main": "index.js",
+  "author": "meandave",
+  "engines": {
+    "firefox": ">=38.0a1"
+  },
+  "bugs": {
+    "url": "https://github.com/meandavejustice/min-vid/issues"
+  },
+  "scripts": {
+    "start": "npm run watch",
+    "watch": "jpm watchpost --post-url http://localhost:8888",
+    "package": "jpm xpi && mv @min-vid-$npm_package_version.xpi dist/addon.xpi"
+  },
+  "license": "MPL-2.0",
+  "dependencies": {
+    "get-youtube-id": "1.0.0"
+  },
+  "dev-dependencies": {
+    "jpm": "1.0.6"
+  }
+}

@@ -1,0 +1,8 @@
+.*
+*
+!/data/**
+!/index.js
+!/install.rdf
+!/bootstrap.js
+!/package.json
+!/node_modules/get-youtube-id/**
