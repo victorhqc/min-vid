@@ -23,7 +23,7 @@
   "dependencies": {
     "get-youtube-id": "1.0.0"
   },
-  "dev-dependencies": {
-    "jpm": "1.0.6"
+  "devDependencies": {
+    "jpm": "1.0.7"
   }
 }
