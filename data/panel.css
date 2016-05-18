@@ -1,0 +1,44 @@
+/*
+ * This Source Code is subject to the terms of the Mozilla Public License
+ * version 2.0 (the 'License'). You can obtain a copy of the License at
+ * http://mozilla.org/MPL/2.0/.
+ */
+
+html,body {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    background: rgba(249, 249, 249, 0.77);
+}
+
+.video {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+iframe {
+    height: 100%;
+    width: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.controls {
+    font-size: 25px;
+    background: rgba(56, 56, 56, 0.82);
+    padding-bottom: 5px;
+}
+
+.controls a {
+    padding: 5px 10px;
+    color: #71ffaa;
+    text-decoration: none;
+}
+
+.controls a:hover {
+    color: #ff9c3b;
+}
