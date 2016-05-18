@@ -7,7 +7,7 @@
 var panel = require("sdk/panel").Panel({
   contentURL: "./default.html",
   width: 300,
-  heigth: 250,
+  height: 250,
   position: {
     bottom: 10,
     left: 10
