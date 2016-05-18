@@ -14,6 +14,9 @@ var panel = require("sdk/panel").Panel({
   }
 });
 
+var { getActiveView } = require("sdk/view/core");
+getActiveView(panel).setAttribute("noautohide", true);
+
 var cm = require("sdk/context-menu");
 
 cm.Item({
