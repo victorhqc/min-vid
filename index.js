@@ -21,7 +21,7 @@ var cm = require("sdk/context-menu");
 
 cm.Item({
   label: "Send to mini player",
-  context: cm.SelectorContext('[href*="youtube.com"]'),
+  context: cm.SelectorContext('[href*="youtube.com"], [href*="youtu.be"]'),
   contentScript: "self.on('click', function (node, data) {" +
                  "  self.postMessage(node.href);" +
                  "});",
