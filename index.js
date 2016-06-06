@@ -4,7 +4,7 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-const qs = require('sdk/querystring');
+const qs = require("sdk/querystring");
 var panel = require("sdk/panel").Panel({
   contentURL: "./default.html",
   contentScriptFile: "./controls.js",
@@ -20,20 +20,20 @@ var { getActiveView } = require("sdk/view/core");
 getActiveView(panel).setAttribute("noautohide", true);
 getActiveView(panel).setAttribute("backdrag", true);
 
-panel.port.on('link', opts => {
+panel.port.on("link", opts => {
   var title = opts.title;
 
-  if (title === 'send-to-tab') {
-    require('sdk/tabs').open('https://youtube.com/watch?v=' + parseYoutubeId(opts.src));
+  if (title === "send-to-tab") {
+    require("sdk/tabs").open("https://youtube.com/watch?v=" + parseYoutubeId(opts.src));
     panel.hide();
-  } else if (title === 'close') {
-    updatePanel('');
+  } else if (title === "close") {
+    updatePanel("");
     panel.hide();
   }
 });
 
 function parseYoutubeId(src) {
-  return src.substr(src.indexOf('embed/') + 6);
+  return src.substr(src.indexOf("embed/") + 6);
 }
 
 var cm = require("sdk/context-menu");
@@ -52,8 +52,8 @@ cm.Item({
 cm.Item({
   label: "Send to mini player",
   context: [
-  cm.URLContext(['*.youtube.com']),
-  cm.SelectorContext('[class*="yt-uix-sessionlink"]'),
+    cm.URLContext(["*.youtube.com"]),
+    cm.SelectorContext('[class*="yt-uix-sessionlink"]')
   ],
   contentScript: "self.on('click', function (node, data) {" +
                  "  self.postMessage(node.href);" +
@@ -64,7 +64,7 @@ cm.Item({
 });
 
 function updatePanel(url) {
-  panel.port.emit('set-video', url);
+  panel.port.emit("set-video", url);
   panel.show();
 }
 
@@ -77,5 +77,5 @@ function constructYoutubeEmbedUrl(url) {
     modestbranding: 1
   });
 
-  return "https://www.youtube.com/embed/" + require('get-youtube-id')(url) + '?' + params;
+  return "https://www.youtube.com/embed/" + require("get-youtube-id")(url) + "?" + params;
 }
