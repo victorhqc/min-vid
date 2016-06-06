@@ -49,6 +49,20 @@ cm.Item({
   }
 });
 
+cm.Item({
+  label: "Send to mini player",
+  context: [
+  cm.URLContext(['*.youtube.com']),
+  cm.SelectorContext('[class*="yt-uix-sessionlink"]'),
+  ],
+  contentScript: "self.on('click', function (node, data) {" +
+                 "  self.postMessage(node.href);" +
+                 "});",
+  onMessage: function(url) {
+    updatePanel(constructYoutubeEmbedUrl(url));
+  }  
+});
+
 function updatePanel(url) {
   panel.port.emit('set-video', url);
   panel.show();
