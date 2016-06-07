@@ -5,9 +5,9 @@
  */
 
 const qs = require('sdk/querystring');
-var panel = require("sdk/panel").Panel({
-  contentURL: "./default.html",
-  contentScriptFile: "./controls.js",
+var panel = require('sdk/panel').Panel({
+  contentURL: './default.html',
+  contentScriptFile: './controls.js',
   width: 300,
   height: 250,
   position: {
@@ -16,9 +16,9 @@ var panel = require("sdk/panel").Panel({
   }
 });
 
-var { getActiveView } = require("sdk/view/core");
-getActiveView(panel).setAttribute("noautohide", true);
-getActiveView(panel).setAttribute("backdrag", true);
+var { getActiveView } = require('sdk/view/core');
+getActiveView(panel).setAttribute('noautohide', true);
+getActiveView(panel).setAttribute('backdrag', true);
 
 panel.port.on('link', opts => {
   var title = opts.title;
@@ -36,28 +36,28 @@ function parseYoutubeId(src) {
   return src.substr(src.indexOf('embed/') + 6);
 }
 
-var cm = require("sdk/context-menu");
+var cm = require('sdk/context-menu');
 
 cm.Item({
-  label: "Send to mini player",
+  label: 'Send to mini player',
   context: cm.SelectorContext('[href*="youtube.com"], [href*="youtu.be"]'),
   contentScript: "self.on('click', function (node, data) {" +
-                 "  self.postMessage(node.href);" +
-                 "});",
+                 '  self.postMessage(node.href);' +
+                 '});',
   onMessage: function(url) {
     updatePanel(constructYoutubeEmbedUrl(url));
   }
 });
 
 cm.Item({
-  label: "Send to mini player",
+  label: 'Send to mini player',
   context: [
-  cm.URLContext(['*.youtube.com']),
-  cm.SelectorContext('[class*="yt-uix-sessionlink"]'),
+    cm.URLContext(['*.youtube.com']),
+    cm.SelectorContext('[class*="yt-uix-sessionlink"]')
   ],
   contentScript: "self.on('click', function (node, data) {" +
-                 "  self.postMessage(node.href);" +
-                 "});",
+                 '  self.postMessage(node.href);' +
+                 '});',
   onMessage: function(url) {
     updatePanel(constructYoutubeEmbedUrl(url));
   }  
@@ -77,5 +77,5 @@ function constructYoutubeEmbedUrl(url) {
     modestbranding: 1
   });
 
-  return "https://www.youtube.com/embed/" + require('get-youtube-id')(url) + '?' + params;
+  return 'https://www.youtube.com/embed/' + require('get-youtube-id')(url) + '?' + params;
 }
