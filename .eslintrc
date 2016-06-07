@@ -13,4 +13,4 @@ rules:
   eqeqeq: 2
   indent: [2, 2]
   no-unused-vars: [2, {vars: all, args: none}]
-  quotes: [2, double, {avoidEscape: true}]
+  quotes: [2, single, {avoidEscape: true}]
