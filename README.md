@@ -1,4 +1,7 @@
 # Min-Vid
+
+[![Build Status](https://travis-ci.org/meandavejustice/min-vid.svg?branch=master)](https://travis-ci.org/meandavejustice/min-vid)
+
 Min-Vid is a Firefox add-on which lets you minimize a web video and keep it within the browser window. The video panel stays visible even when you switch tabs, so you can keep watching while you browse.
 
 ## Usage
@@ -7,20 +10,20 @@ Install the xpi located at [dist/addon.xpi](dist/addon.xpi) and right
 click on a video link (only YouTube currently supported). In the context
 menu you will see an option 'Send to mini player'.
 
-![context menu option](send-to-player.png)
+![context menu option](docs/send-to-player.png)
 
 You can switch tabs and continue browsing as usual
-![playing example](playing.png)
+![playing example](docs/playing.png)
 
 ## Development
-This is a proof of concept, there are bugs. contributions welcome. To get started, 
+This is a proof of concept, there are bugs. contributions welcome. To get started,
 
 1.  Clone the repo:
 
    `https://github.com/meandavejustice/min-vid.git`
 2.  Install packages:
 
-   `npm install` 
+   `npm install`
 3. Before submitting a Pull Request, package the Add-on:
 
    `npm run package`
@@ -33,4 +36,4 @@ After you install Extension Auto-Installer, run:
 `npm run watch`
 
 ## LICENSE
-Mozilla Public License 2.0
+[Mozilla Public License 2.0](LICENSE)
