@@ -8,8 +8,8 @@ const qs = require('sdk/querystring');
 var panel = require('sdk/panel').Panel({
   contentURL: './default.html',
   contentScriptFile: './controls.js',
-  width: 300,
-  height: 250,
+  width: 320,
+  height: 180,
   position: {
     bottom: 10,
     left: 10
@@ -24,11 +24,30 @@ panel.port.on('link', opts => {
   var title = opts.title;
 
   if (title === 'send-to-tab') {
-    require('sdk/tabs').open('https://youtube.com/watch?v=' + parseYoutubeId(opts.src));
+    require('sdk/tabs').open('https://youtube.com/watch?v=' + parseYoutubeId(opts.src) + '&t=' + opts.time);
+    updatePanel('');
     panel.hide();
   } else if (title === 'close') {
     updatePanel('');
     panel.hide();
+  } else if (title === 'minimize') {
+    panel.hide();
+    panel.show({
+      height: 40,
+      position: {
+        bottom: 0,
+        left: 10
+      }
+    });
+  } else if (title === 'maximize') {
+    panel.hide();
+    panel.show({
+      height: 180,
+      position: {
+        bottom: 10,
+        left: 10
+      }
+    });
   }
 });
 
@@ -60,7 +79,7 @@ cm.Item({
                  '});',
   onMessage: function(url) {
     updatePanel(constructYoutubeEmbedUrl(url));
-  }  
+  }
 });
 
 function updatePanel(url) {
