@@ -10,9 +10,36 @@ html, body, iframe {
     padding: 0;
 }
 
+iframe {
+    width: 100%;
+    height: 100%;
+}
+
 html, body {
     background: rgba(249, 249, 249, 0.77);
     text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.loading {
+    background: url('img/testcard.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.loading p {
+    color: white;
+    padding: 21px;
+    font-size: 19px;
+}
+
+.error {
+    background: url('img/static.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .video-wrapper {
@@ -24,17 +51,177 @@ html, body {
 }
 
 .controls {
-    background: rgba(56, 56, 56, 0.82);
+    display: none;
+}
+
+.progress {
+    display: none;
+}
+
+.video-wrapper:hover .controls {
+    display: block;
+}
+
+.video-wrapper:hover .progress {
+    display: block;
+}
+
+.controls {
+    width: 100%;
+    height: 40px;
     font-size: 25px;
     padding-bottom: 5px;
+    position: absolute;
+
+    padding: 2px 0;
 }
 
 .controls a {
-    color: #71ffaa;
-    padding: 5px 10px;
+    opacity: .7;
     text-decoration: none;
+    background-repeat: no-repeat;
+    margin: 2px 8px;
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .controls a:hover {
-    color: #ff9c3b;
+    opacity: 1;
+}
+
+.controls.minimized {
+    display: block !important;
+    background: #000 !important;
+    opacity: .9;
+}
+
+.controls.minimized a {
+    margin-top: 10px;
+}
+
+.left {
+    float: left;
+    margin-left: 5px;
+}
+
+.right {
+    float: right;
+    margin-right: 5px;
+}
+
+.play {
+    background: url('img/play.svg');
+}
+
+.pause {
+    background: url('img/pause.svg');
+}
+
+.mute {
+    background: url('img/unmute.svg');
+}
+
+.unmute {
+    background: url('img/mute.svg');
+}
+
+.tab {
+    background: url('img/to-tab.svg');
+}
+
+.min {
+    background: url('img/minimize.svg');
+}
+
+.max {
+    background: url('img/maximize.svg');
+}
+
+.close {
+    background: url('img/close.svg');
+}
+
+.volume {
+    display: none;
+    width: 75px;
+    border-radius: 5px;
+    margin-left: -15px;
+    cursor: pointer;
+}
+
+.volume::-moz-range-track {
+    width: 75px;
+    height: 6px;
+    background: #eeeeee80;
+    border: none;
+    border-radius: 5px;
+}
+
+.volume::-moz-range-progress {
+    background: #4789d7;
+    height: 6px;
+    border-radius: 5px;
+}
+
+.volume::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: white;   
+}
+
+/*hide the outline behind the border*/
+.volume:-moz-focusring {
+    outline: none;
+}
+
+input[type=range]::-moz-focus-outer {
+    border: 0;       
+}
+
+.progress {
+    position: absolute;
+    bottom: 5px;
+}
+
+.progress span {
+    color: white;
+    opacity: .7;
+}
+
+.progress span:hover {
+    opacity: 1;
+}
+
+.video-progress {
+    width: 290px;
+    height: 10px;
+    border-radius: 20px;
+    border: none;
+    background: #ffffff80;
+}
+
+.video-progress[value]::-moz-progress-bar {
+    appearance: none;
+    border-radius: 20px;
+    border: none;
+    background: #4789d7;
+}
+
+.time {
+    float: right;
+    color: white;
+    padding-right: 15px;
+}
+.domain {
+    float: left;
+    color: white;
+    padding-left: 15px;
+}
+
+.controls:hover .volume {
+    display: inline-block;
 }
