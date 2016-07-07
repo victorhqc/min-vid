@@ -8,103 +8,18 @@
     <meta charset="utf-8">
     <title>MIN-VID PANEL</title>
     <link rel="stylesheet" href="panel.css" type="text/css" media="screen" />
+
+    <!-- uncomment for manual testing of ui in browser without addon reload loop -->
+    <!-- <style> -->
+    <!--   #container { -->
+    <!--     width: 320px !important; -->
+    <!--     height: 180px !important; -->
+    <!--     border: 1px solid pink; -->
+    <!--   } -->
+    <!-- </style> -->
   </head>
   <body>
-    <div class="loading">
-      <img src="img/loading-bars.svg" alt="loading-animation" width="64" height="64"/>
-      <p>Loading...</p>
-    </div>
-
-    <div class="error hidden">
-      <img src="img/sadface.png" width="164" height="164"/>
-    </div>
-
-    <div class="video-wrapper hidden">
-      <div class="controls">
-        <div class="left">
-          <a title="playback" class="play"></a>
-          <a title="mute" class="mute"></a>
-          <a title="unmute" class="unmute hidden"></a>
-          <input class="volume" type="range" min="0" max="100" step="1" value="75"/>
-        </div>
-
-        <div class="right">
-          <a title="send-to-tab" class="tab"></a>
-          <a title="minimize" class="min"></a>
-          <a title="maximize" class="max hidden"></a>
-
-          <a title="close" class="close"></a>
-        </div>
-      </div>
-
-      <div class="progress">
-        <span class="domain"></span>
-        <span class="time"></span>
-        <progress class="video-progress" value="0"></progress>
-      </div>
-
-      <iframe id="video"></iframe>
-    </div>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-     console.log('default.html loaded');
-     function onYouTubeIframeAPIReady() {console.log('yt api ready');} // for debugging
-
-     var progressInterval;
-     var time = document.querySelector('.time');
-     var progress = document.querySelector('.video-progress');
-     var loadingView = document.querySelector('.loading');
-     var videoView = document.querySelector('.video-wrapper');
-     var frame = document.querySelector('#video');
-     frame.onload = updatePlayer;
-
-     function updatePlayer(ev) {
-       if (!frame.src) return;
-       window.ytPlayer = new YT.Player('video', {
-         events: {
-           'onReady': showVideo,
-           'onError': onYTError
-         }
-       });
-     }
-
-     function onYTError() {
-       frame.src = '';
-       loadingView.classList.add('hidden');
-       videoView.classList.add('hidden');
-       document.querySelector('.error').classList.remove('hidden');
-     }
-
-     function showVideo() {
-       loadingView.classList.add('hidden');
-       videoView.classList.remove('hidden');
-
-       progress.querySelector('.domain').innerText = new URL(frame.src);
-
-       progressInterval = setInterval(function() {
-         setTime();
-         updateProgress();
-       }, 200);
-     }
-
-     function formatTime(c, d) {
-       return ((c / 60).toFixed(2) + ' / ' + (d / 60).toFixed(2)).replace('.', ':');
-     }
-
-     function setTime() {
-       time.innerText = formatTime(window.ytPlayer.getCurrentTime(),
-                                   window.ytPlayer.getDuration());
-       time.setAttribute('current-time', window.ytPlayer.getCurrentTime());
-
-       if (window.ytPlayer.getCurrentTime() >= window.ytPlayer.getDuration()) {
-         clearInterval(progressInterval);
-       }
-     }
-
-     function updateProgress() {
-       progress.setAttribute('value', window.ytPlayer.getCurrentTime() / window.ytPlayer.getDuration());
-     }
-    </script>
+    <div id="container"></div>
+    <script src="bundle.js"></script>
   </body>
 </html>

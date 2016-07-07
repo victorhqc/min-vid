@@ -4,7 +4,10 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-const qs = require('sdk/querystring');
+const getVideoId = require('get-video-id');
+const getYoutubeUrl = require('./lib/get-youtube-url.js');
+const getVimeoUrl = require('./lib/get-vimeo-url.js');
+
 var panel = require('sdk/panel').Panel({
   contentURL: './default.html',
   contentScriptFile: './controls.js',
@@ -16,19 +19,18 @@ var panel = require('sdk/panel').Panel({
   }
 });
 
-var { getActiveView } = require('sdk/view/core');
+const { getActiveView } = require('sdk/view/core');
 getActiveView(panel).setAttribute('noautohide', true);
-getActiveView(panel).setAttribute('backdrag', true);
 
-panel.port.on('link', opts => {
-  var title = opts.title;
+panel.port.on('message', opts => {
+  var title = opts.action;
 
   if (title === 'send-to-tab') {
-    require('sdk/tabs').open('https://youtube.com/watch?v=' + parseYoutubeId(opts.src) + '&t=' + opts.time);
-    updatePanel('');
+    const pageUrl = getPageUrl(opts.domain, opts.id);
+    if (pageUrl) require('sdk/tabs').open(pageUrl);
+    else console.error('could not parse page url for ', opts); // eslint-disable-line no-console
     panel.hide();
   } else if (title === 'close') {
-    updatePanel('');
     panel.hide();
   } else if (title === 'minimize') {
     panel.hide();
@@ -51,20 +53,31 @@ panel.port.on('link', opts => {
   }
 });
 
-function parseYoutubeId(src) {
-  return src.substr(src.indexOf('embed/') + 6);
+function getPageUrl(domain, id) {
+  let url;
+  if (domain.indexOf('youtube') > -1) {
+    url = 'https://youtube.com/watch?v=' + id;
+  } else if (domain.indexOf('vimeo') > -1) {
+    url = 'https://vimeo.com/' + id;
+  }
+
+  return url;
 }
 
-var cm = require('sdk/context-menu');
+const cm = require('sdk/context-menu');
 
 cm.Item({
   label: 'Send to mini player',
   context: cm.SelectorContext('[href*="youtube.com"], [href*="youtu.be"]'),
-  contentScript: "self.on('click', function (node, data) {" +
+  contentScript: 'self.on("click", function (node, data) {' +
                  '  self.postMessage(node.href);' +
                  '});',
   onMessage: function(url) {
-    updatePanel(constructYoutubeEmbedUrl(url));
+    const id = getVideoId(url);
+    updatePanel({domain: 'youtube.com', id: id, src: ''});
+    getYoutubeUrl(id, function(err, streamUrl) {
+      if (!err) updatePanel({src: streamUrl});
+    });
   }
 });
 
@@ -74,46 +87,35 @@ cm.Item({
     cm.URLContext(['*.youtube.com']),
     cm.SelectorContext('[class*="yt-uix-sessionlink"]')
   ],
-  contentScript: "self.on('click', function (node, data) {" +
+  contentScript: 'self.on("click", function (node, data) {' +
                  '  self.postMessage(node.href);' +
                  '});',
   onMessage: function(url) {
-    updatePanel(constructYoutubeEmbedUrl(url));
-  }
-});
-
-function updatePanel(url) {
-  panel.port.emit('set-video', url);
-  panel.show();
-}
-
-function constructYoutubeEmbedUrl(url) {
-  const params = qs.stringify({
-    autoplay: 0,
-    showinfo: 0,
-    controls: 0,
-    enablejsapi: 1,
-    modestbranding: 1
-  });
-
-  return 'https://www.youtube.com/embed/' + require('get-youtube-id')(url) + '?' + params;
-}
-
-var pageMod = require("sdk/page-mod");
-
-pageMod.PageMod({
-  include: '*',
-  contentScriptFile: './resize-listener.js',
-  onAttach: function(worker) {
-    worker.port.on("resized", function() {
-      refreshPanel();
+    const id = getVideoId(url);
+    updatePanel({domain: 'youtube.com', id: id, src: ''});
+    getYoutubeUrl(id, function(err, streamUrl) {
+      if (!err) updatePanel({src: streamUrl});
     });
   }
 });
 
-function refreshPanel() {
-  if (panel.isShowing) {
-    panel.hide();
-    panel.show();
+cm.Item({
+  label: 'Send to mini player',
+  context: cm.SelectorContext('[href*="vimeo.com"]'),
+  contentScript: 'self.on("click", function (node, data) {' +
+                 '  self.postMessage(node.href);' +
+                 '});',
+  onMessage: function(url) {
+
+    const id = getVideoId(url);
+    updatePanel({domain: 'vimeo.com', id: id, src: ''});
+    getVimeoUrl(id, function(err, streamUrl) {
+      if (!err) updatePanel({src: streamUrl});
+    });
   }
+});
+
+function updatePanel(opts) {
+  panel.port.emit('set-video', opts);
+  panel.show();
 }

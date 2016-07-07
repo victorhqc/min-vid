@@ -14,7 +14,7 @@ function debounce(func, wait, immediate) {
 }
 
 var onResize = debounce(function() {
-  self.port.emit("resized", {});
+  self.port.emit('resized', {});
 }, 50);
 
-window.addEventListener("resize", onResize);
+window.addEventListener('resize', onResize);
