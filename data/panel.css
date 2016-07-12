@@ -4,13 +4,13 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-html, body, iframe {
+html, body, video {
     border: none;
     margin: 0;
     padding: 0;
 }
 
-iframe {
+html, body, video, .player-wrap, .app, .loading, #container {
     width: 100%;
     height: 100%;
 }
@@ -18,6 +18,10 @@ iframe {
 html, body {
     background: rgba(249, 249, 249, 0.77);
     text-align: center;
+}
+
+.app {
+    overflow: hidden;
 }
 
 .hidden {
@@ -34,6 +38,7 @@ html, body {
     color: white;
     padding: 21px;
     font-size: 19px;
+    margin-top: 0;
 }
 
 .error {
@@ -46,24 +51,8 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    position: fixed;
+    position: relative;
     width: 100%;
-}
-
-.controls {
-    display: none;
-}
-
-.progress {
-    display: none;
-}
-
-.video-wrapper:hover .controls {
-    display: block;
-}
-
-.video-wrapper:hover .progress {
-    display: block;
 }
 
 .controls {
@@ -131,11 +120,11 @@ html, body {
     background: url('img/to-tab.svg');
 }
 
-.min {
+.minimize {
     background: url('img/minimize.svg');
 }
 
-.max {
+.maximize {
     background: url('img/maximize.svg');
 }
 
@@ -144,10 +133,9 @@ html, body {
 }
 
 .volume {
-    display: none;
     width: 75px;
     border-radius: 5px;
-    margin-left: -15px;
+    margin-left: -5px;
     cursor: pointer;
 }
 
