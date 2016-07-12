@@ -119,3 +119,22 @@ function updatePanel(opts) {
   panel.port.emit('set-video', opts);
   panel.show();
 }
+
+var pageMod = require("sdk/page-mod");
+
+pageMod.PageMod({
+  include: '*',
+  contentScriptFile: './resize-listener.js',
+  onAttach: function(worker) {
+    worker.port.on("resized", function() {
+      refreshPanel();
+    });
+  }
+});
+
+function refreshPanel() {
+  if (panel.isShowing) {
+    panel.hide();
+    panel.show();
+  }
+}
