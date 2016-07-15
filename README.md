@@ -30,21 +30,21 @@ Once you have the addon installed, you will be able to right click on
 video links(youtube supported, others coming soon) and select the
 `send to mini player` option from the context menu.
 
-![context menu option](docs/send-to-player.png)
+![context menu option](docs/images/send-to-player.png)
 
 <br>
 <hr>
 <br>
 
 You can switch tabs and continue browsing as usual
-![playing example](docs/playing.png)
+![playing example](docs/images/playing.png)
 
 <br>
 <hr>
 <br>
 
 You may also minimize the video while still controlling playback
-![minimized example](docs/minimized.png)
+![minimized example](docs/images/minimized.png)
 
 ## Development
 This is a proof of concept, there are bugs. contributions welcome. To get started,

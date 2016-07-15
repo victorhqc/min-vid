@@ -1,7 +1,7 @@
 {
   "title": "min-vid",
   "name": "min-vid",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "minimize web videos",
   "homepage": "https://github.com/meandavejustice/min-vid",
@@ -16,16 +16,25 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "build-script": "browserify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
+    "watch-script": "watchify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
     "start": "npm run watch",
     "watch": "jpm watchpost --post-url http://localhost:8888",
-    "package": "jpm xpi && mv @min-vid-$npm_package_version.xpi dist/addon.xpi"
+    "package": "npm run build-script && jpm xpi && mv @min-vid-$npm_package_version.xpi dist/addon.xpi"
   },
   "license": "MPL-2.0",
   "dependencies": {
-    "get-youtube-id": "1.0.0"
+    "get-video-id": "0.0.6"
   },
   "devDependencies": {
+    "babel": "6.5.2",
+    "babel-preset-react": "6.11.1",
+    "babelify": "7.3.0",
+    "browserify": "13.0.1",
     "eslint": "2.10.2",
-    "jpm": "1.0.7"
+    "jpm": "1.0.7",
+    "react": "15.1.0",
+    "react-dom": "15.1.0",
+    "watchify": "3.7.0"
   }
 }
