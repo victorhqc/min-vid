@@ -12,7 +12,6 @@ self.port.on('set-video', opts => {
     playing: false,
     volume: '0.5'
   });
-
   unsafeWindow.AppData = Object.assign(unsafeWindow.AppData, opts);
 });
 

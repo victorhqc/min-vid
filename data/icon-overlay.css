@@ -1,0 +1,37 @@
+.minvid__overlay__container {
+    display: flex;
+    position: absolute;
+    top: 5%;
+    left: 4%;
+    width: 15%;
+    max-width: 45px;
+    max-height: 35px;
+    height: 100%;
+    border-radius: 0 0 3px 3px;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+}
+
+.minvid__overlay__container:hover {
+    background: rgba(0,0,0,.2);
+}
+
+.minvid__overlay__container:hover .minvid__overlay__icon {
+    opacity: .1s cubic-bezier(0.4,0.0,1,1);
+    opacity: 1;
+}
+
+.minvid__overlay__icon {
+    background: url('img/overlay-player-icon.svg') no-repeat;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background-size: contain;
+    opacity: .1;
+}
+
+.minvid__overlay__wrapper:hover .minvid__overlay__icon {
+    opacity: .9;
+    transition: opacity .25s cubic-bezier(0.0,0.0,0.2,1);
+}
