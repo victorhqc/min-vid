@@ -3,10 +3,5 @@ language: node_js
 node_js:
   - 4
 
-before_script:
-  - npm i addons-linter -g
-
 script:
-  - npm run lint
   - npm run package
-  - addons-linter dist/addon.xpi

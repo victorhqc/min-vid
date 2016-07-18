@@ -120,13 +120,13 @@ function updatePanel(opts) {
   panel.show();
 }
 
-var pageMod = require("sdk/page-mod");
+var pageMod = require('sdk/page-mod');
 
 pageMod.PageMod({
   include: '*',
   contentScriptFile: './resize-listener.js',
   onAttach: function(worker) {
-    worker.port.on("resized", function() {
+    worker.port.on('resized', function() {
       refreshPanel();
     });
   }
