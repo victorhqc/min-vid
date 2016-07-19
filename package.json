@@ -20,7 +20,7 @@
     "watch-script": "watchify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
     "start": "npm run watch",
     "watch": "jpm watchpost --post-url http://localhost:8888",
-    "package": "npm run build-script && jpm xpi && mv @min-vid-$npm_package_version.xpi dist/addon.xpi",
+    "package": "npm run build-script && jpm xpi && mv min-vid.xpi dist/addon.xpi",
     "postpackage": "addons-linter dist/addon.xpi -o text",
     "prepackage": "npm run lint"
   },
@@ -29,14 +29,14 @@
     "get-video-id": "0.0.6"
   },
   "devDependencies": {
-    "addons-linter": "0.14.0",
+    "addons-linter": "0.14.1",
     "babel": "6.5.2",
     "babel-preset-react": "6.11.1",
     "babelify": "7.3.0",
     "browserify": "13.0.1",
-    "eslint": "2.10.2",
+    "eslint": "3.1.1",
     "eslint-plugin-react": "5.2.2",
-    "jpm": "1.0.7",
+    "jpm": "1.1.1",
     "react": "15.1.0",
     "react-dom": "15.1.0",
     "watchify": "3.7.0"
