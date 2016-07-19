@@ -5,7 +5,7 @@
  */
 
 const getVideoId = require('get-video-id');
-const getYoutubeUrl = require('./lib/get-youtube-url.js');
+const getYouTubeUrl = require('./lib/get-youtube-url.js');
 const getVimeoUrl = require('./lib/get-vimeo-url.js');
 
 var panel = require('sdk/panel').Panel({
@@ -75,7 +75,7 @@ cm.Item({
   onMessage: function(url) {
     const id = getVideoId(url);
     updatePanel({domain: 'youtube.com', id: id, src: ''});
-    getYoutubeUrl(id, function(err, streamUrl) {
+    getYouTubeUrl(id, function(err, streamUrl) {
       if (!err) updatePanel({src: streamUrl});
     });
   }
@@ -93,7 +93,7 @@ cm.Item({
   onMessage: function(url) {
     const id = getVideoId(url);
     updatePanel({domain: 'youtube.com', id: id, src: ''});
-    getYoutubeUrl(id, function(err, streamUrl) {
+    getYouTubeUrl(id, function(err, streamUrl) {
       if (!err) updatePanel({src: streamUrl});
     });
   }
