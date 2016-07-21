@@ -92,12 +92,8 @@ body {
 
 .controls.minimized {
     background: #000 !important;
-    display: block !important;
+    display: flex !important;
     opacity: .9;
-}
-
-.controls.minimized a {
-    margin-top: 10px;
 }
 
 .left,
