@@ -188,10 +188,6 @@ input[type=range]::-moz-focus-outer {
 
 .progress span {
     color: white;
-    opacity: .7;
-}
-
-.progress span:hover {
     opacity: 1;
 }
 
