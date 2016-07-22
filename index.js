@@ -26,7 +26,7 @@ panel.port.on('message', opts => {
   const title = opts.action;
 
   if (title === 'send-to-tab') {
-    const pageUrl = getPageUrl(opts.domain, opts.id);
+    const pageUrl = getPageUrl(opts.domain, opts.id, opts.time);
     if (pageUrl) require('sdk/tabs').open(pageUrl);
     else console.error('could not parse page url for ', opts); // eslint-disable-line no-console
     panel.hide();
@@ -53,12 +53,14 @@ panel.port.on('message', opts => {
   }
 });
 
-function getPageUrl(domain, id) {
+function getPageUrl(domain, id, time) {
   let url;
   if (domain.indexOf('youtube') > -1) {
-    url = 'https://youtube.com/watch?v=' + id;
+    url = `https://youtube.com/watch?v=${id}&t=${Math.floor(time)}`;
   } else if (domain.indexOf('vimeo') > -1) {
-    url = 'https://vimeo.com/' + id;
+    const min = Math.floor(time / 60);
+    const sec = Math.floor(time - min * 60);
+    url = `https://vimeo.com/${id}#t=${min}m${sec}s`;
   }
 
   return url;

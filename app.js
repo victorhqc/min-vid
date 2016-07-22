@@ -53,9 +53,12 @@ window.AppData = new Proxy(defaultData, {
 //   });
 // }, 8000);
 
-function formatTime(c, d) {
-  // example:   0:35 / 2:33
-  return ((c / 60).toFixed(2) + ' / ' + (d / 60).toFixed(2)).replace('.', ':');
+function formatTime(seconds) {
+  const now = new Date(seconds * 1000);
+  const utc = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000));
+  return utc.toLocaleTimeString('en-US', {hour12: false})
+    .replace(/^00:/, '') // Strip leading "00:" if hours is empty.
+    .replace(/^0/, '');  // Strip leading "0" in minutes, if any.
 }
 
 const App = React.createClass({
@@ -122,7 +125,7 @@ const PlayerView = React.createClass({
   },
   step: function() {
     window.AppData = Object.assign(window.AppData, {
-      currentTime: formatTime(this.refs.video.currentTime, window.AppData.duration),
+      currentTime: `${formatTime(this.refs.video.currentTime)} / ${formatTime(window.AppData.duration)}`,
       progress: this.refs.video.currentTime / window.AppData.duration
     });
 
@@ -190,7 +193,8 @@ const PlayerView = React.createClass({
     sendToAddon({
       action: 'send-to-tab',
       id: window.AppData.id,
-      domain: window.AppData.domain
+      domain: window.AppData.domain,
+      time: this.refs.video.currentTime
     });
   },
   close: function() {
