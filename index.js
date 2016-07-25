@@ -8,7 +8,7 @@ const getVideoId = require('get-video-id');
 const getYouTubeUrl = require('./lib/get-youtube-url.js');
 const getVimeoUrl = require('./lib/get-vimeo-url.js');
 
-var panel = require('sdk/panel').Panel({
+const panel = require('sdk/panel').Panel({
   contentURL: './default.html',
   contentScriptFile: './controls.js',
   width: 320,
@@ -23,7 +23,7 @@ const { getActiveView } = require('sdk/view/core');
 getActiveView(panel).setAttribute('noautohide', true);
 
 panel.port.on('message', opts => {
-  var title = opts.action;
+  const title = opts.action;
 
   if (title === 'send-to-tab') {
     const pageUrl = getPageUrl(opts.domain, opts.id);
@@ -120,7 +120,7 @@ function updatePanel(opts) {
   panel.show();
 }
 
-var pageMod = require('sdk/page-mod');
+const pageMod = require('sdk/page-mod');
 
 pageMod.PageMod({
   include: '*',
