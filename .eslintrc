@@ -25,4 +25,6 @@ rules:
   eqeqeq: 2
   indent: [2, 2]
   no-unused-vars: [2, {vars: all, args: none}]
+  no-var: 1
+  prefer-const: 2
   quotes: [2, single, {avoidEscape: true, allowTemplateLiterals: true}]
