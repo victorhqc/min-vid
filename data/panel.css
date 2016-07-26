@@ -4,18 +4,27 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-html, body, video {
+html,
+body,
+video {
     border: none;
     margin: 0;
     padding: 0;
 }
 
-html, body, video, .player-wrap, .app, .loading, #container {
-    width: 100%;
+html,
+body,
+video,
+.player-wrap,
+.app,
+.loading,
+#container {
     height: 100%;
+    width: 100%;
 }
 
-html, body {
+html,
+body {
     background: rgba(249, 249, 249, 0.77);
     text-align: center;
 }
@@ -29,25 +38,26 @@ html, body {
 }
 
 .loading {
-    background: url('img/testcard.jpeg');
-    background-size: cover;
     background-repeat: no-repeat;
+    background-size: cover;
+    background: url('img/testcard.jpeg');
 }
 
 .loading p {
     color: white;
-    padding: 21px;
     font-size: 19px;
     margin-top: 0;
+    padding: 21px;
 }
 
 .error {
-    background: url('img/static.gif');
-    background-size: cover;
     background-repeat: no-repeat;
+    background-size: cover;
+    background: url('img/static.gif');
 }
 
 .video-wrapper {
+    background: #000;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -56,24 +66,24 @@ html, body {
 }
 
 .controls {
-    width: 100%;
+    background: linear-gradient(rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .33) 70%, transparent 100%);
+    box-sizing: border-box;
+    display: flex;
     height: 40px;
-    font-size: 25px;
-    padding-bottom: 5px;
+    justify-content: space-between;
     position: absolute;
-
-    padding: 2px 0;
+    transition: opacity 250ms;
+    width: 100%;
 }
 
 .controls a {
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 40px;
     opacity: .7;
     text-decoration: none;
-    background-repeat: no-repeat;
-    margin: 2px 8px;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    cursor: pointer;
+    width: 40px;
 }
 
 .controls a:hover {
@@ -81,8 +91,8 @@ html, body {
 }
 
 .controls.minimized {
-    display: block !important;
     background: #000 !important;
+    display: block !important;
     opacity: .9;
 }
 
@@ -90,14 +100,9 @@ html, body {
     margin-top: 10px;
 }
 
-.left {
-    float: left;
-    margin-left: 5px;
-}
-
+.left,
 .right {
-    float: right;
-    margin-right: 5px;
+    display: flex;
 }
 
 .play {
@@ -133,32 +138,33 @@ html, body {
 }
 
 .volume {
-    width: 75px;
     border-radius: 5px;
-    margin-left: -5px;
     cursor: pointer;
+    margin-left: -3px;
+    margin-top: 11px;
+    width: 75px;
 }
 
 .volume::-moz-range-track {
-    width: 75px;
-    height: 6px;
-    background: #eeeeee80;
-    border: none;
+    background: #eeeeeecc;
     border-radius: 5px;
+    border: none;
+    height: 6px;
+    width: 75px;
 }
 
 .volume::-moz-range-progress {
     background: #4789d7;
-    height: 6px;
     border-radius: 5px;
+    height: 6px;
 }
 
 .volume::-moz-range-thumb {
+    background: white;
+    border-radius: 50%;
     border: none;
     height: 16px;
     width: 16px;
-    border-radius: 50%;
-    background: white;   
 }
 
 /*hide the outline behind the border*/
@@ -171,8 +177,13 @@ input[type=range]::-moz-focus-outer {
 }
 
 .progress {
+    background: linear-gradient(to top, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .33) 70%, transparent 100%);
+    bottom: 0;
+    box-sizing: border-box;
+    flex-direction: column;
+    height: 50px;
+    padding-top: 6px;  
     position: absolute;
-    bottom: 5px;
 }
 
 .progress span {
@@ -185,28 +196,30 @@ input[type=range]::-moz-focus-outer {
 }
 
 .video-progress {
-    width: 290px;
-    height: 10px;
+    background: #ffffffaa;
     border-radius: 20px;
     border: none;
-    background: #ffffff80;
+    height: 10px;
+    margin-top: 6px;
+    width: 290px;
 }
 
 .video-progress[value]::-moz-progress-bar {
     appearance: none;
+    background: #4789d7;
     border-radius: 20px;
     border: none;
-    background: #4789d7;
 }
 
 .time {
-    float: right;
     color: white;
+    float: right;
     padding-right: 15px;
 }
+
 .domain {
-    float: left;
     color: white;
+    float: left;
     padding-left: 15px;
 }
 
