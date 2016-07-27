@@ -21,7 +21,7 @@ the addon from [dist/addon.xpi](dist/addon.xpi) in this repo. And
 install it by dragging it onto the `about:addons` page.
 
 * set `xpinstall.signatures.required` in `about:config`
-* download xpi from [dist/addon.xpi](dist/addon.xpi)
+* download xpi from [our temporary location](https://people.mozilla.org/~jhirsch/min-vid-addon/addon.xpi)
 * install xpi by dragging onto the `about:addons` page
 
 ## Usage
