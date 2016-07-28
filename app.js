@@ -193,6 +193,12 @@ const PlayerView = React.createClass({
       domain: window.AppData.domain
     });
   },
+  setTime: function(ev) {
+    const x = ev.pageX - ev.target.offsetLeft;
+    const clickedValue = x * ev.target.max / ev.target.offsetWidth;
+
+    this.refs.video.currentTime = this.refs.video.duration * clickedValue;
+  },
   close: function() {
     sendToAddon({action: 'close'});
   },
@@ -233,7 +239,7 @@ const PlayerView = React.createClass({
         <div className={'progress ' + ((this.state.hovered && !this.props.minimized) ? '' : 'hidden')}>
           <span className={'domain'}>{this.props.domain}</span>
           <div className={'time'}>{this.props.currentTime}</div>
-          <progress className={'video-progress'} value={this.props.progress + ''} />
+          <progress className={'video-progress'} value={this.props.progress + ''} onClick={this.setTime} />
         </div>
 
         <video id={'video'} ref={'video'} src={this.props.src} autoplay={false} />
