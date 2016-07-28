@@ -7,6 +7,7 @@
 const getVideoId = require('get-video-id');
 const getYouTubeUrl = require('./lib/get-youtube-url.js');
 const getVimeoUrl = require('./lib/get-vimeo-url.js');
+const getVineUrl = require('./lib/get-vine-url.js');
 
 const panel = require('sdk/panel').Panel({
   contentURL: './default.html',
@@ -61,6 +62,8 @@ function getPageUrl(domain, id, time) {
     const min = Math.floor(time / 60);
     const sec = Math.floor(time - min * 60);
     url = `https://vimeo.com/${id}#t=${min}m${sec}s`;
+  } else if (domain.indexOf('vine') > -1) {
+    url = 'https://vine.co/v/' + id;
   }
 
   return url;
@@ -112,6 +115,21 @@ cm.Item({
     const id = getVideoId(url);
     updatePanel({domain: 'vimeo.com', id: id, src: ''});
     getVimeoUrl(id, function(err, streamUrl) {
+      if (!err) updatePanel({src: streamUrl});
+    });
+  }
+});
+
+cm.Item({
+  label: 'Send to mini player',
+  context: cm.SelectorContext('[href*="vine.co/v/"]'),
+  contentScript: 'self.on("click", function (node, data) {' +
+                 '  self.postMessage(node.href);' +
+                 '});',
+  onMessage: function(url) {
+    const id = getVideoId(url);
+    updatePanel({domain: 'vine.co', id: id, src: ''});
+    getVineUrl(url, function(err, streamUrl) {
       if (!err) updatePanel({src: streamUrl});
     });
   }

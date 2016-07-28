@@ -26,7 +26,7 @@
   },
   "license": "MPL-2.0",
   "dependencies": {
-    "get-video-id": "0.0.6"
+    "get-video-id": "1.0.0"
   },
   "devDependencies": {
     "addons-linter": "0.14.1",
