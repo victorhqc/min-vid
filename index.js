@@ -8,6 +8,14 @@ const getVideoId = require('get-video-id');
 const getYouTubeUrl = require('./lib/get-youtube-url.js');
 const getVimeoUrl = require('./lib/get-vimeo-url.js');
 const getVineUrl = require('./lib/get-vine-url.js');
+const pageMod = require('sdk/page-mod');
+const cm = require('sdk/context-menu');
+
+const contextMenuLabel = 'Send to mini player';
+const contextMenuContentScript = `
+self.on('click', function (node, data) {
+  self.postMessage(node.href);
+});`;
 
 const panel = require('sdk/panel').Panel({
   contentURL: './default.html',
@@ -30,8 +38,10 @@ panel.port.on('message', opts => {
     const pageUrl = getPageUrl(opts.domain, opts.id, opts.time);
     if (pageUrl) require('sdk/tabs').open(pageUrl);
     else console.error('could not parse page url for ', opts); // eslint-disable-line no-console
+    updatePanel({domain: '', src: ''});
     panel.hide();
   } else if (title === 'close') {
+    updatePanel({domain: '', src: ''});
     panel.hide();
   } else if (title === 'minimize') {
     panel.hide();
@@ -63,75 +73,56 @@ function getPageUrl(domain, id, time) {
     const sec = Math.floor(time - min * 60);
     url = `https://vimeo.com/${id}#t=${min}m${sec}s`;
   } else if (domain.indexOf('vine') > -1) {
-    url = 'https://vine.co/v/' + id;
+    url = `https://vine.co/v/${id}`;
   }
 
   return url;
 }
 
-const cm = require('sdk/context-menu');
-
 cm.Item({
-  label: 'Send to mini player',
+  label: contextMenuLabel,
   context: cm.SelectorContext('[href*="youtube.com"], [href*="youtu.be"]'),
-  contentScript: 'self.on("click", function (node, data) {' +
-                 '  self.postMessage(node.href);' +
-                 '});',
-  onMessage: function(url) {
-    const id = getVideoId(url);
-    updatePanel({domain: 'youtube.com', id: id, src: ''});
-    getYouTubeUrl(id, function(err, streamUrl) {
-      if (!err) updatePanel({src: streamUrl});
-    });
+  contentScript: contextMenuContentScript,
+  onMessage: (url) => {
+    launchVideo({url: url,
+                 domain: 'youtube.com',
+                 getUrlFn: getYouTubeUrl});
   }
 });
 
 cm.Item({
-  label: 'Send to mini player',
+  label: contextMenuLabel,
   context: [
     cm.URLContext(['*.youtube.com']),
     cm.SelectorContext('[class*="yt-uix-sessionlink"]')
   ],
-  contentScript: 'self.on("click", function (node, data) {' +
-                 '  self.postMessage(node.href);' +
-                 '});',
-  onMessage: function(url) {
-    const id = getVideoId(url);
-    updatePanel({domain: 'youtube.com', id: id, src: ''});
-    getYouTubeUrl(id, function(err, streamUrl) {
-      if (!err) updatePanel({src: streamUrl});
-    });
+  contentScript: contextMenuContentScript,
+  onMessage: (url) => {
+    launchVideo({url: url,
+                 domain: 'youtube.com',
+                 getUrlFn: getYouTubeUrl});
   }
 });
 
 cm.Item({
-  label: 'Send to mini player',
+  label: contextMenuLabel,
   context: cm.SelectorContext('[href*="vimeo.com"]'),
-  contentScript: 'self.on("click", function (node, data) {' +
-                 '  self.postMessage(node.href);' +
-                 '});',
-  onMessage: function(url) {
-
-    const id = getVideoId(url);
-    updatePanel({domain: 'vimeo.com', id: id, src: ''});
-    getVimeoUrl(id, function(err, streamUrl) {
-      if (!err) updatePanel({src: streamUrl});
-    });
+  contentScript: contextMenuContentScript,
+  onMessage: (url)=> {
+    launchVideo({url: url,
+                 domain: 'vimeo.com',
+                 getUrlFn: getVimeoUrl});
   }
 });
 
 cm.Item({
-  label: 'Send to mini player',
+  label: contextMenuLabel,
   context: cm.SelectorContext('[href*="vine.co/v/"]'),
-  contentScript: 'self.on("click", function (node, data) {' +
-                 '  self.postMessage(node.href);' +
-                 '});',
+  contentScript: contextMenuContentScript,
   onMessage: function(url) {
-    const id = getVideoId(url);
-    updatePanel({domain: 'vine.co', id: id, src: ''});
-    getVineUrl(url, function(err, streamUrl) {
-      if (!err) updatePanel({src: streamUrl});
-    });
+    launchVideo({url: url,
+                 domain: 'vine.co',
+                 getUrlFn: getVineUrl});
   }
 });
 
@@ -140,21 +131,43 @@ function updatePanel(opts) {
   panel.show();
 }
 
-const pageMod = require('sdk/page-mod');
+function launchVideo(opts) {
+  // opts {url: url, getUrlFn: getYouTubeUrl, domain: 'youtube.com'}
+  const id = getVideoId(opts.url);
+  updatePanel({domain: opts.domain, id: id, src: ''});
+  opts.getUrlFn(id, function(err, streamUrl) {
+    if (!err) updatePanel({src: streamUrl});
+  });
+}
 
+// handle browser resizing
 pageMod.PageMod({
   include: '*',
   contentScriptFile: './resize-listener.js',
   onAttach: function(worker) {
     worker.port.on('resized', function() {
-      refreshPanel();
+      if (panel.isShowing) {
+        panel.hide();
+        panel.show();
+      }
     });
   }
 });
 
-function refreshPanel() {
-  if (panel.isShowing) {
-    panel.hide();
-    panel.show();
+// add launch icon to video embeds
+pageMod.PageMod({
+  include: '*',
+  contentStyleFile: './icon-overlay.css',
+  contentScriptFile: './icon-overlay.js',
+  onAttach: function(worker) {
+    worker.port.on('launch', function(opts) {
+      if (opts.domain.indexOf('youtube.com') > -1) {
+        opts.getUrlFn = getYouTubeUrl;
+        launchVideo(opts);
+      } else if (opts.domain.indexOf('vimeo.com')  > -1) {
+        opts.getUrlFn = getVimeoUrl;
+        launchVideo(opts);
+      }
+    });
   }
-}
+});
