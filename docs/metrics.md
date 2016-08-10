@@ -19,7 +19,6 @@ On pages where compatible video elements exist and are playing, how often is min
 
 ### Additional interesting questions
 
-- How are min-vid sessions initiated? Current options include doorhanger, context menu, and universal search.
 - How long is a video kept minimized?
 - What sites are used the most? (youtube, random video elements etc)
 - What is the most common placement and size for the video frame?
@@ -28,35 +27,66 @@ On pages where compatible video elements exist and are playing, how often is min
 ## Data Collection
 
 Min-vid has no server side component, so all data is gathered on the client and
-reported via Firefox's Telemetry System.  Due to the overall low volume of data
-pings, min-vid will not do any batching on the client side, instead sending
-pings immediately.  Pings will be sent:
+reported via Firefox's Telemetry System. min-vid will not do any batching on
+the client side, instead sending pings immediately.
 
-* When a user visits a page on a whitelisted domain which contains a video element **which is playing**
-  * The action is recorded as 'available'
-* When a user interacts with min-vid, actions include:
-  * 'activate', 'deactivate' -- using min-vid itself
-  * 'play', 'pause', 'seek', 'volume'  --  all buttins in min-vid UI
-  * 'resize', 'move', 'fullscreen' -- positioning of min-vid
-* When a video ends without user-interaction
-  * The action is recorded as 'end'
+### Event types
 
-Here's an example of the `payload` portion of a Test Pilot telemetry ping:
+Here is the complete set of object/method event pairs sent by min-vid.
+The events are tied to button clicks (like 'play' or 'pause') unless
+otherwise noted.
+
+* Object: `contextmenu`
+  * method: `activate`
+    * Sent when the user right-clicks a video and sends it to the min-vid player.
+
+* Object: `error_view`
+  * method: `render`
+    * Sent when the error view is displayed (a video failed to load).
+
+* Object: `loading_view`
+  * method: `render`
+    * Sent when the loading view is displayed.
+  * method: `close`
+
+* Object: `loading_view`
+  * method: `render`
+    * Sent when the player view is displayed.
+  * method: `video_loaded`
+    * Sent when the video has loaded in the player view.
+  * method: `send_to_tab`
+  * method: `play`
+  * method: `pause`
+  * method: `mute`
+  * method: `unmute`
+  * method: `minimize`
+  * method: `maximize`
+  * method: `close`
+
+Here's an example of a complete Test Pilot telemetry ping. Note that min-vid only sends the
+`payload` portion to the Test Pilot add-on. The Test Pilot add-on appends the `test` and `agent`
+fields, transforms the `timestamp` from a standard JavaScript milliseconds-since-epoch time
+to the number of seconds since Firefox app startup, and wraps the payload under the `payload` key.
 
 ```js
+// Example: complete Test Pilot telemetry ping:
 {
   "test": "@min-vid",                // The em:id field from the add-on
   "agent": "User Agent String",
   "payload": {
-    "action": "activate",            // see full list above
-    "activated_from": "contextmenu", // or '' or 'doorhanger' or 'universalsearch'
-    "domain": "youtube.com",         // This domain will be in our whitelist of sites
-    "doorhanger_prompted": true,     // did we prompt? (regardless of if it was clicked)
-    "doorhanger_clicked": true,
-    "video_x": 1200,                 // All dimensions in pixels
-    "video_y": 1150,
-    "video_width": 300,
-    "video_height": 110
+    "object": "player_view",         // UI component
+    "method": "pause",               // Event type
+
+    "domain": "youtube.com",         // Domain from a whitelist of video hosting sites
+    "video_x": 1200,                 // Distance in pixels from top of browser window
+                                     // to top of min-vid panel
+    "video_y": 1150,                 // Distance in pixels from left side of browser
+                                     // window to left side of min-vid panel
+    "video_width": 300,              // Width of min-vid player, in pixels
+    "video_height": 110,             // Height of min-vid panel, in pixels
+    "timestamp": 1470                // Timestamp in seconds since Firefox started (note:
+                                     // min-vid sends over a regular JS millisecond timestamp,
+                                     // the Test Pilot add-on converts it to seconds since startup)
   }
 }
 ```
@@ -76,11 +106,9 @@ local schema = {
     {"user_agent_os",              "VARCHAR",   255,     nil,         "Fields[user_agent_os]"},
     {"user_agent_version",         "VARCHAR",   255,     nil,         "Fields[user_agent_version]"},
 
-    {"action",                     "VARCHAR",   255,     nil,         "payload[action]"},
-    {"activated_from",             "VARCHAR",   255,     nil,         "payload[activated_from]"},
+    {"object",                     "VARCHAR",   255,     nil,         "payload[object]"},
+    {"method",                     "VARCHAR",   255,     nil,         "payload[method]"},
     {"domain",                     "VARCHAR",   255,     nil,         "payload[domain]"},
-    {"doorhanger_prompted",        "BOOLEAN",   nil,     nil,         "payload[doorhanger_prompted]"},
-    {"doorhanger_clicked",         "BOOLEAN",   nil,     nil,         "payload[doorhanger_clicked]"},
 
     {"video_x",                    "BOOLEAN",   nil,     nil,         "payload[video_x]"},
     {"video_y",                    "BOOLEAN",   nil,     nil,         "payload[video_y]"},
@@ -92,3 +120,9 @@ local schema = {
 Note that we are *not* recording which videos are watched, only the domain it was watched on.
 
 All data is kept by default for 180 days.
+
+### Changing the Event Format
+
+When changing keys in the metrics data object, be sure to
+- update the add-on version
+- ping the data team to update the Redshift schema (clone [this](https://bugzilla.mozilla.org/show_bug.cgi?id=1270586) Bugzilla bug)
