@@ -49,13 +49,16 @@ otherwise noted.
     * Sent when the loading view is displayed.
   * method: `close`
 
-* Object: `loading_view`
+* Object: `player_view`
   * method: `render`
     * Sent when the player view is displayed.
   * method: `video_loaded`
     * Sent when the video has loaded in the player view.
+  * method: `video_ended`
+    * Sent when the video completed full playback.
   * method: `send_to_tab`
   * method: `play`
+  * method: `replay`
   * method: `pause`
   * method: `mute`
   * method: `unmute`
@@ -78,6 +81,8 @@ to the number of seconds since Firefox app startup, and wraps the payload under 
     "method": "pause",               // Event type
 
     "domain": "youtube.com",         // Domain from a whitelist of video hosting sites
+    "played_count": 2,               // count of full video playback
+
     "video_x": 1200,                 // Distance in pixels from top of browser window
                                      // to top of min-vid panel
     "video_y": 1150,                 // Distance in pixels from left side of browser
@@ -109,11 +114,12 @@ local schema = {
     {"object",                     "VARCHAR",   255,     nil,         "payload[object]"},
     {"method",                     "VARCHAR",   255,     nil,         "payload[method]"},
     {"domain",                     "VARCHAR",   255,     nil,         "payload[domain]"},
+    {"played_count",               "INTEGER",   4,       nil,         "payload[played_count]"},
 
-    {"video_x",                    "BOOLEAN",   nil,     nil,         "payload[video_x]"},
-    {"video_y",                    "BOOLEAN",   nil,     nil,         "payload[video_y]"},
-    {"video_width",                "BOOLEAN",   nil,     nil,         "payload[video_width]"},
-    {"video_height",               "BOOLEAN",   nil,     nil,         "payload[video_height]"}
+    {"video_x",                    "INTEGER",   4,       nil,         "payload[video_x]"},
+    {"video_y",                    "INTEGER",   4,       nil,         "payload[video_y]"},
+    {"video_width",                "INTEGER",   4,       nil,         "payload[video_width]"},
+    {"video_height",               "INTEGER",   4,       nil,         "payload[video_height]"}
 }
 ```
 

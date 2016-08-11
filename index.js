@@ -80,6 +80,7 @@ function sendMetricsData(o) {
     object: o.object,
     method: o.method,
     domain: o.domain,
+    'played_count': o.playedCount,
     video_x: coords.top,
     video_y: coords.left,
     video_width: coords.width,

@@ -56,6 +56,43 @@ body {
     background: url('img/static.gif');
 }
 
+.exited {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.exited .row {
+    width: auto;
+}
+
+.exited button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    height: 50px;
+    margin: 20px;
+    opacity: .7;
+    padding: 30px;
+    width: 50px;
+}
+
+.exited button:hover {
+    opacity: 1;
+}
+
+.exited .exit-replay {
+    background-image: url('img/exit-replay.svg');
+}
+
+.exited .exit-close {
+    background-image: url('img/exit-close.svg');
+}
+
 .video-wrapper {
     background: #000;
     height: 100%;

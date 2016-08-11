@@ -15,6 +15,7 @@ const defaultData = {
   duration: 0,
   progress: 0.001, // force progress element to start out empty
   playing: false,
+  playedCount: 0,
   volume: '0.5'
 };
 
@@ -105,7 +106,8 @@ function sendMetricsEvent(object, method) {
     payload: {
       object: object,
       method: method,
-      domain: window.AppData.domain
+      domain: window.AppData.domain,
+      playedCount: window.AppData.playedCount
     }
   });
 }
@@ -122,6 +124,8 @@ const PlayerView = React.createClass({
 
     if (this.refs.video.currentTime >= window.AppData.duration) {
       window.AppData.playing = false;
+      window.AppData.playedCount++;
+      sendMetricsEvent('player_view', 'video_ended');
     }
 
     if (window.AppData.playing) requestAnimationFrame(this.step);
@@ -142,6 +146,9 @@ const PlayerView = React.createClass({
     this.refs.video.addEventListener('progress', ev => {});
   },
   play: function() {
+    if (this.hasExited()) {
+      return this.replay();
+    }
     sendMetricsEvent('player_view', 'play');
     this.refs.video.play();
     window.AppData.playing = true;
@@ -202,6 +209,12 @@ const PlayerView = React.createClass({
 
     this.refs.video.currentTime = this.refs.video.duration * clickedValue;
   },
+  replay: function() {
+    sendMetricsEvent('player_view', 'replay');
+    this.refs.video.currentTime = 0;
+    this.step(); // step once to set currentTime of window.AppData and progress
+    this.play();
+  },
   close: function() {
     sendMetricsEvent('player_view', 'close');
     sendToAddon({action: 'close'});
@@ -217,6 +230,10 @@ const PlayerView = React.createClass({
   },
   leavePlayer: function() {
     this.setState({hovered: false});
+  },
+  hasExited: function() {
+    if (!this.refs.video) return false;
+    return (!this.props.playing && (this.refs.video.currentTime >= this.props.duration));
   },
   render: function() {
     sendMetricsEvent('player_view', 'render');
@@ -249,7 +266,14 @@ const PlayerView = React.createClass({
                  className={cn('maximize', {hidden: !this.props.minimized})} />
               <a onClick={this.close} data-tip='Close' className='close' />
             </div>
-         </div>
+          </div>
+
+          <div className={cn('exited', {hidden: !this.hasExited()})}>
+            <div className='row'>
+              <button className='exit-replay' onClick={this.replay}></button>
+              <button className='exit-close' onClick={this.close}></button>
+            </div>
+          </div>
 
           <div className={cn('progress', {hidden: !this.state.hovered || this.props.minimized})}>
             <span className={'domain'}>{this.props.domain}</span>
