@@ -161,6 +161,21 @@ cm.Item({
   }
 });
 
+cm.Item({
+  label: contextMenuLabel,
+  context: [
+    cm.URLContext(['https://vine.co/*']),
+    cm.SelectorContext('video')
+  ],
+  contentScript: 'self.on("click", function (node, data) {' +
+              ' self.postMessage(node.poster);' +
+              ' });',
+  onMessage: function(url) {
+    const mp4 = url.replace(/thumbs/, 'videos').split('.jpg')[0];
+    updatePanel({src: mp4});
+  }
+});
+
 function updatePanel(opts) {
   panel.port.emit('set-video', opts);
   panel.show();
