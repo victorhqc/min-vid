@@ -189,8 +189,10 @@ cm.Item({
               ' self.postMessage(node.poster);' +
               ' });',
   onMessage: function(url) {
-    const mp4 = url.replace(/thumbs/, 'videos').split('.jpg')[0];
-    updatePanel({src: mp4});
+    const mp4 = url.replace(/thumbs/, 'videos').split(/\.jpg/)[0];
+    launchVideo({url: url,
+                domain: 'vine.co',
+                src: mp4});
   }
 });
 
@@ -199,14 +201,19 @@ function updatePanel(opts) {
   panel.show();
 }
 
+// Pass in a video URL as opts.src or pass in a video URL lookup function as opts.getUrlFn
 function launchVideo(opts) {
-  // opts {url: url, getUrlFn: getYouTubeUrl, domain: 'youtube.com'}
+  // opts {url: url,
+  //       getUrlFn: getYouTubeUrl,
+  //       domain: 'youtube.com',
+  //       src: streamURL or ''}
   const id = getVideoId(opts.url);
-  updatePanel({domain: opts.domain, id: id, src: ''});
-  opts.getUrlFn(id, function(err, streamUrl) {
-    if (!err) updatePanel({src: streamUrl});
-  });
-
+  updatePanel({domain: opts.domain, id: id, src: opts.src || ''});
+  if (!opts.src) {
+    opts.getUrlFn(id, function(err, streamUrl) {
+      if (!err) updatePanel({src: streamUrl});
+    });
+  }
   // todo: see if we can just call this when initializing the panel
   makePanelTransparent(panel);
 }
