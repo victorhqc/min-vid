@@ -17,6 +17,33 @@ const makePanelTransparent = require('./lib/make-panel-transparent.js');
 const getDocumentDimensions = require('./lib/get-document-dimensions.js');
 const pageMod = require('sdk/page-mod');
 const cm = require('sdk/context-menu');
+
+const URLS = {
+  'vimeo': ['vimeo.com/'],
+  'youtube': ['youtube.com/', 'youtu.be/'],
+  'vine': ['vine.co/']
+}
+
+// Given a video service name from the URLS object, return an href *= selector
+// for the corresponding urls.
+// Arguments:
+//   videoService: a key from URLS or '*' for all domains from URLS
+//   shouldEncode: (optional) encode domains if true
+function getSelectors(videoService, shouldEncode) {
+  let domains = [];
+  if (videoService in URLS) {
+    domains = URLS[videoService]
+  } else if (videoService === '*') {
+    domains = Object.keys(URLS).map(name => URLS[name])
+                               .reduce((prev, curr) => prev.concat(curr))
+  } else {
+    console.error(`Error: ${videoService} missing or not supported`) // eslint-disable-line no-console
+  }
+  const selectors = domains.map(url => `[href*="${shouldEncode ? encodeURIComponent(url) : url}"]`)
+                           .reduce((prev, curr) => `${prev}, ${curr}`)
+  return selectors;
+}
+
 const contextMenuLabel = 'Send to mini player';
 const contextMenuContentScript = `
 self.on('click', function (node, data) {
@@ -130,7 +157,7 @@ function getPageUrl(domain, id, time) {
 
 cm.Item({
   label: contextMenuLabel,
-  context: cm.SelectorContext('[href*="youtube.com"], [href*="youtu.be"]'),
+  context: cm.SelectorContext(getSelectors('youtube')),
   contentScript: contextMenuContentScript,
   onMessage: (url) => {
     sendMetricsData({changed: 'activate', domain: 'youtube.com'});
@@ -157,7 +184,7 @@ cm.Item({
 
 cm.Item({
   label: contextMenuLabel,
-  context: cm.SelectorContext('[href*="vimeo.com"]'),
+  context: cm.SelectorContext(getSelectors('vimeo')),
   contentScript: contextMenuContentScript,
   onMessage: (url)=> {
     sendMetricsData({changed: 'activate', domain: 'vimeo.com'});
@@ -169,7 +196,7 @@ cm.Item({
 
 cm.Item({
   label: contextMenuLabel,
-  context: cm.SelectorContext('[href*="vine.co/v/"]'),
+  context: cm.SelectorContext(getSelectors('vine')),
   contentScript: contextMenuContentScript,
   onMessage: function(url) {
     sendMetricsData({changed: 'activate', domain: 'vine.co'});
@@ -193,6 +220,35 @@ cm.Item({
     launchVideo({url: url,
                 domain: 'vine.co',
                 src: mp4});
+  }
+});
+
+cm.Item({
+  label: contextMenuLabel,
+  context: [
+    cm.URLContext(['*.google.com']),
+    cm.SelectorContext(getSelectors('*', true)),
+  ],
+  contentScript: contextMenuContentScript,
+  onMessage: function(url) {
+    const regex = /url=(https?[^;]*)/.exec(url)[1];
+    const decoded = decodeURIComponent(regex).split('&usg')[0];
+    let getUrlFn, domain;
+    if (decoded.indexOf('youtube.com' || 'youtu.be') > -1) {
+      getUrlFn = getYouTubeUrl;
+      domain = 'youtube.com';
+    } else if (decoded.indexOf('vimeo.com')  > -1) {
+      getUrlFn = getVimeoUrl;
+      domain = 'vimeo.com';
+    } else if (decoded.indexOf('vine.co') > -1) {
+      getUrlFn = getVineUrl;
+      domain = 'vine.co';
+    }
+    if (domain && getUrlFn) {
+      launchVideo({url: decoded,
+        domain: domain,
+        getUrlFn: getUrlFn});
+    }
   }
 });
 
