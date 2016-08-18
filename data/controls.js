@@ -15,6 +15,9 @@ self.port.on('set-video', opts => {
   unsafeWindow.AppData = Object.assign(unsafeWindow.AppData, opts);
 });
 
+// Bridge between app.js window messages to the
+// addon. We pass true for the wantsUntrusted param
+// in order to access the message events. #82
 window.addEventListener('message', function(ev) {
   self.port.emit('message', ev.detail);
 }, false, true);
