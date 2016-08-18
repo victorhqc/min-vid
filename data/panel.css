@@ -25,7 +25,7 @@ video,
 
 html,
 body {
-    background: rgba(249, 249, 249, 0.77);
+    background: transparent;
     text-align: center;
 }
 
@@ -230,7 +230,7 @@ input[type=range]::-moz-focus-outer {
     border: none;
     height: 10px;
     margin-top: 6px;
-    width: 290px;
+    width: 95%;
 }
 
 .video-progress[value]::-moz-progress-bar {

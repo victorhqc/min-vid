@@ -13,14 +13,17 @@ const getVideoId = require('get-video-id');
 const getYouTubeUrl = require('./lib/get-youtube-url.js');
 const getVimeoUrl = require('./lib/get-vimeo-url.js');
 const getVineUrl = require('./lib/get-vine-url.js');
+const makePanelTransparent = require('./lib/make-panel-transparent.js');
+const getDocumentDimensions = require('./lib/get-document-dimensions.js');
 const pageMod = require('sdk/page-mod');
 const cm = require('sdk/context-menu');
-
 const contextMenuLabel = 'Send to mini player';
 const contextMenuContentScript = `
 self.on('click', function (node, data) {
   self.postMessage(node.href);
 });`;
+
+let dimensions = getDocumentDimensions();
 
 const panel = require('sdk/panel').Panel({
   contentURL: './default.html',
@@ -65,6 +68,20 @@ panel.port.on('message', opts => {
         bottom: 10,
         left: 10
       }
+    });
+  } else if (title === 'expand-panel') {
+    panel.hide();
+    panel.show({
+      width: dimensions.width,
+      height: dimensions.height,
+      position: opts.position
+    });
+  } else if (title === 'shrink-panel') {
+    panel.hide();
+    panel.show({
+      width: opts.style.width,
+      height: opts.style.height,
+      position: opts.position
     });
   } else if (title === 'metrics-event') {
     sendMetricsData(opts);
@@ -189,6 +206,9 @@ function launchVideo(opts) {
   opts.getUrlFn(id, function(err, streamUrl) {
     if (!err) updatePanel({src: streamUrl});
   });
+
+  // todo: see if we can just call this when initializing the panel
+  makePanelTransparent(panel);
 }
 
 // handle browser resizing
@@ -201,6 +221,9 @@ pageMod.PageMod({
         panel.hide();
         panel.show();
       }
+
+      // update our document dimensions
+      dimensions = getDocumentDimensions();
     });
   }
 });
