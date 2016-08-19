@@ -2,8 +2,8 @@ const React = require('react');
 const ReactTooltip = require('react-tooltip');
 const cn = require('classnames');
 
-const sendToAddon = require('../lib/send-to-addon');
 const sendMetricsEvent = require('../lib/send-metrics-event.js');
+const GeneralControls = require('./general-controls.js');
 
 function formatTime(seconds) {
   const now = new Date(seconds * 1000);
@@ -85,25 +85,6 @@ module.exports = React.createClass({
       volume: ev.target.value
     });
   },
-  minimize: function() {
-    sendMetricsEvent('player_view', 'minimize');
-    sendToAddon({action: 'minimize'});
-    window.AppData.minimized = true;
-  },
-  maximize: function() {
-    sendMetricsEvent('player_view', 'maximize');
-    sendToAddon({action: 'maximize'});
-    window.AppData.minimized = false;
-  },
-  sendToTab: function() {
-    sendMetricsEvent('player_view', 'send_to_tab');
-    sendToAddon({
-      action: 'send-to-tab',
-      id: window.AppData.id,
-      domain: window.AppData.domain,
-      time: this.refs.video.currentTime
-    });
-  },
   setTime: function(ev) {
     const x = ev.pageX - ev.target.offsetLeft;
     const clickedValue = x * ev.target.max / ev.target.offsetWidth;
@@ -115,10 +96,6 @@ module.exports = React.createClass({
     this.refs.video.currentTime = 0;
     this.step(); // step once to set currentTime of window.AppData and progress
     this.play();
-  },
-  close: function() {
-    sendMetricsEvent('player_view', 'close');
-    sendToAddon({action: 'close'});
   },
   enterControls: function() {
     this.setState({showVolume: true});
@@ -159,14 +136,7 @@ module.exports = React.createClass({
                      onChange={this.setVolume}/>
             </div>
 
-            <div className='right'>
-              <a onClick={this.sendToTab} data-tip='Send to tab' className='tab' />
-              <a onClick={this.minimize} data-tip='Minimize'
-                 className={cn('minimize', {hidden: this.props.minimized})} />
-              <a onClick={this.maximize} data-tip='Maximize'
-                 className={cn('maximize', {hidden: !this.props.minimized})} />
-              <a onClick={this.close} data-tip='Close' className='close' />
-            </div>
+            <GeneralControls props={this.props} />
           </div>
 
           <div className={cn('exited', {hidden: !this.hasExited()})}>
