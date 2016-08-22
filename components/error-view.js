@@ -1,5 +1,5 @@
 const React = require('react');
-const sendMetricsEvent = require('../lib/send-metrics-event.js');
+const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
 
 module.exports = React.createClass({
   render: function() {

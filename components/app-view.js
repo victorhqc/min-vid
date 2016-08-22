@@ -1,6 +1,6 @@
 const React = require('react');
 const Draggable = require('react-draggable');
-const sendToAddon = require('../lib/send-to-addon');
+const sendToAddon = require('../client-lib/send-to-addon');
 
 const PlayerView = require('./player-view');
 const LoadingView = require('./loading-view');
