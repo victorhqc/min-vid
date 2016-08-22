@@ -2,7 +2,7 @@ const React = require('react');
 const ReactTooltip = require('react-tooltip');
 const cn = require('classnames');
 
-const sendMetricsEvent = require('../lib/send-metrics-event.js');
+const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
 const GeneralControls = require('./general-controls.js');
 
 function formatTime(seconds) {

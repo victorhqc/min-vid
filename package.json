@@ -22,13 +22,13 @@
     "watch": "jpm watchpost --post-url http://localhost:8888",
     "package": "npm run build-script && jpm xpi && mv min-vid.xpi dist/addon.xpi",
     "postpackage": "addons-linter dist/addon.xpi -o text",
-    "prepackage": "npm run lint"
+    "prepackage": "npm run lint",
+    "dev": "npm run watch-script & npm run watch & http-server -c-1"
   },
+  "precommit": "build-script, package",
   "license": "MPL-2.0",
   "dependencies": {
-    "get-video-id": "1.0.0",
-    "classnames": "2.2.5",
-    "react-tooltip": "3.0.13"
+    "get-video-id": "1.0.0"
   },
   "devDependencies": {
     "addons-linter": "0.14.1",
@@ -36,12 +36,16 @@
     "babel-preset-react": "6.11.1",
     "babelify": "7.3.0",
     "browserify": "13.0.1",
+    "classnames": "2.2.5",
     "eslint": "3.1.1",
     "eslint-plugin-react": "5.2.2",
+    "http-server": "0.9.0",
     "jpm": "1.1.1",
+    "pre-commit": "1.1.3",
     "react": "15.1.0",
     "react-dom": "15.1.0",
     "react-draggable": "2.2.1",
+    "react-tooltip": "3.0.13",
     "watchify": "3.7.0"
   }
 }

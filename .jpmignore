@@ -6,4 +6,5 @@
 !/install.rdf
 !/bootstrap.js
 !/package.json
-!/node_modules/get-video-id/**
+!/node_modules/get-video-id/package.json
+!/node_modules/get-video-id/index.js
