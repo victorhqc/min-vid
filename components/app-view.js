@@ -27,20 +27,17 @@ module.exports = React.createClass({
       this.setState({draggablePosition: null});
     } else return;
   },
-  handleStop: function(ev, data) {
-    // only drag if we aren't hitting our buttons or progress bar
-    if (ev.target.classList.contains('controls') || ev.target.id === 'video') {
-      this.setState({position: {
-        left: data.x,
-        top: data.y
-      }});
-      sendToAddon(xtend(this.state, {action: 'shrink-panel'}));
-      this.setState({draggablePosition: {x: 0, y: 0}});
-    } else return;
+  handleDragStop: function(ev, data) {
+    this.setState({position: {
+      left: data.x,
+      top: data.y
+    }});
+    sendToAddon(xtend(this.state, {action: 'shrink-panel'}));
+    this.setState({draggablePosition: {x: 0, y: 0}});
   },
   render: function() {
     return (
-        <Draggable onStop={this.handleStop} onStart={this.handleDragStart} position={this.state.draggablePosition}>
+        <Draggable onStop={this.handleDragStop} onStart={this.handleDragStart} position={this.state.draggablePosition}>
           <div className={'app'} style={this.state.style} ref={(el) => this._element = el}>
             {/* Show Error View, ELSE Show Loading View ELSE no view */}
             {this.props.error ? <ErrorView {...this.props}/> :
