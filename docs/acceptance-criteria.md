@@ -32,7 +32,7 @@ Requirements and Assumptions:
 | Action | issues |
 | ---- | ------------- | ------------- |
 | Drag UI around | [#2](https://github.com/meandavejustice/min-vid/issues/2) |
-| Resize video | [#69](https://github.com/meandavejustice/min-vid/issues/69) |
+| ~~Resize video~~ No longer in launch scope | [#69](https://github.com/meandavejustice/min-vid/issues/69) |
 | Create global key bindings for min-vid controls | [#67](https://github.com/meandavejustice/min-vid/issues/67) |
 
 
