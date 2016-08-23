@@ -7,7 +7,7 @@ const defaultData = {
   src: '',
   domain: '',
   minimized: false,
-  loaded: true,
+  loaded: false,
   error: false,
   muted: false,
   currentTime: '0:00 / 0:00',
@@ -30,5 +30,3 @@ function renderApp() {
   ReactDOM.render(React.createElement(AppView, window.AppData),
                   document.getElementById('container'));
 }
-
-renderApp();

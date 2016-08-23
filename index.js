@@ -66,7 +66,7 @@ const panel = require('sdk/panel').Panel({
 const { getActiveView } = require('sdk/view/core');
 getActiveView(panel).setAttribute('noautohide', true);
 
-panel.port.on('message', opts => {
+panel.port.on('addon-message', opts => {
   const title = opts.action;
 
   if (title === 'send-to-tab') {

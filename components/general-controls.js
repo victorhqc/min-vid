@@ -1,30 +1,40 @@
 const React = require('react');
 const cn = require('classnames');
+const ytCtrl = require('../client-lib/yt-ctrl');
 const sendToAddon = require('../client-lib/send-to-addon');
 const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
 
 module.exports = React.createClass({
+  getView: function() {
+    return this.props.loaded ? 'player_view' : 'loading_view';
+  },
   close: function() {
-    sendMetricsEvent('loading_view', 'close');
+    sendMetricsEvent(this.getView(), 'close');
     sendToAddon({action: 'close'});
   },
   minimize: function() {
-    sendMetricsEvent('loading_view', 'minimize');
+    sendMetricsEvent(this.getView(), 'minimize');
     sendToAddon({action: 'minimize'});
     window.AppData.minimized = true;
   },
   maximize: function() {
-    sendMetricsEvent('loading_view', 'maximize');
+    sendMetricsEvent(this.getView(), 'maximize');
     sendToAddon({action: 'maximize'});
     window.AppData.minimized = false;
   },
   sendToTab: function() {
-    sendMetricsEvent('loading_view', 'send_to_tab');
+    sendMetricsEvent(this.getView(), 'send_to_tab');
+    let currentTime = 0;
+
+    if (this.getView() === 'player_view') {
+      currentTime = this.props.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
+    }
+
     sendToAddon({
       action: 'send-to-tab',
-      id: window.AppData.id,
-      domain: window.AppData.domain,
-      time: this.refs.video.currentTime
+      id: this.props.id,
+      domain: this.props.domain,
+      time: currentTime
     });
   },
   render: function() {
@@ -35,8 +45,8 @@ module.exports = React.createClass({
           onClick={this.minimize} data-tip='Minimize' />
         <a onClick={this.maximize} data-tip='Maximize'
           className={cn('maximize', {hidden: !this.props.minimized})} />
-        <a className='close' onClick={this.close} data-tip='Close' /> 
+        <a className='close' onClick={this.close} data-tip='Close' />
       </div>
-    );  
+    );
   }
 });

@@ -1,11 +1,26 @@
 const React = require('react');
-const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
+const cn = require('classnames');
+const ReactTooltip = require('react-tooltip');
+const GeneralControls = require('./general-controls.js');
 
 module.exports = React.createClass({
+  getInitialState: function() {
+    return {hovered: false};
+  },
+  enterView: function() {
+    this.setState({hovered: true});
+  },
+  leaveView: function() {
+    this.setState({hovered: false});
+  },
   render: function() {
-    sendMetricsEvent('error_view', 'render');
     return (
-        <div className={'error'}>
+        <div className={'error'} onMouseEnter={this.enterView} onMouseLeave={this.leaveView}>
+          <ReactTooltip place='bottom' effect='solid' />
+          <div className={cn('controls', {hidden: !this.state.hovered, minimized: this.props.minimized})}>
+            <div className='left' />
+            <GeneralControls {...this.props} />
+          </div>
           <img src={'img/sadface.png'}
                alt={'sadface because of error'}
                width={164} height={164}></img>

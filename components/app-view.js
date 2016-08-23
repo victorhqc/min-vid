@@ -18,22 +18,25 @@ module.exports = React.createClass({
       position: {
         bottom: 0,
         left: 0
-      }
+      },
+      dragging: false
     };
   },
   handleDragStart: function(ev) {
     if (ev.target.classList.contains('controls') || ev.target.id === 'video') {
       sendToAddon(xtend(this.state, {action: 'expand-panel'}));
-      this.setState({draggablePosition: null});
+      this.setState({draggablePosition: null, dragging: true});
     } else return;
   },
   handleDragStop: function(ev, data) {
-    this.setState({position: {
-      left: data.x,
-      top: data.y
-    }});
-    sendToAddon(xtend(this.state, {action: 'shrink-panel'}));
-    this.setState({draggablePosition: {x: 0, y: 0}});
+    if (this.state.dragging) {
+      this.setState({position: {
+        left: data.x,
+        top: data.y
+      }});
+      sendToAddon(xtend(this.state, {action: 'shrink-panel'}));
+      this.setState({draggablePosition: {x: 0, y: 0}, dragging: false});
+    } else return;
   },
   render: function() {
     return (
