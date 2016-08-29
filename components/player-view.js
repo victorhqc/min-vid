@@ -2,6 +2,7 @@ const React = require('react');
 const ReactTooltip = require('react-tooltip');
 const cn = require('classnames');
 
+const ytCtrl = require('../client-lib/yt-ctrl.js');
 const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
 const GeneralControls = require('./general-controls.js');
 
@@ -18,12 +19,14 @@ module.exports = React.createClass({
     return {showVolume: false, hovered: false};
   },
   step: function() {
+    const currentTime = this.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
+
     window.AppData = Object.assign(window.AppData, {
-      currentTime: `${formatTime(this.refs.video.currentTime)} / ${formatTime(window.AppData.duration)}`,
-      progress: this.refs.video.currentTime / window.AppData.duration
+      currentTime: `${formatTime(currentTime)} / ${formatTime(window.AppData.duration)}`,
+      progress: currentTime / window.AppData.duration
     });
 
-    if (this.refs.video.currentTime >= window.AppData.duration) {
+    if (currentTime >= window.AppData.duration) {
       window.AppData.playing = false;
       window.AppData.playedCount++;
       sendMetricsEvent('player_view', 'video_ended');
@@ -33,36 +36,64 @@ module.exports = React.createClass({
   },
   onLoaded: function() {
     sendMetricsEvent('player_view', 'video_loaded');
+    const duration = this.isYt ? ytCtrl.getDuration() : this.refs.video.duration;
+
     window.AppData = Object.assign(window.AppData, {
       loaded: true,
-      duration: this.refs.video.duration
+      duration: duration
     });
 
     requestAnimationFrame(this.step);
   },
+  componentWillMount: function() {
+    this.isYt = this.props.domain === 'youtube.com';
+  },
   componentDidMount: function() {
-    this.refs.video.addEventListener('canplay', this.onLoaded);
-    this.refs.video.addEventListener('durationchange', this.onLoaded);
-    // TODO: progress here will help us calculate load/buffering of video
-    this.refs.video.addEventListener('progress', ev => {});
+    if (this.isYt) {
+      ytCtrl.init('video', {
+        onReady: this.onLoaded,
+        onError: (err) => {
+          window.AppData.error = true;
+          console.error('Error: ytCtrl: ', err); // eslint-disable-line no-console
+        }
+      });
+    } else {
+      this.refs.video.addEventListener('canplay', this.onLoaded);
+      this.refs.video.addEventListener('durationchange', this.onLoaded);
+    }
   },
   play: function() {
     if (this.hasExited()) {
       return this.replay();
     }
     sendMetricsEvent('player_view', 'play');
-    this.refs.video.play();
+    if (this.isYt) {
+      ytCtrl.play();
+    } else {
+      this.refs.video.play();
+    }
     window.AppData.playing = true;
     requestAnimationFrame(this.step);
   },
   pause: function() {
     sendMetricsEvent('player_view', 'pause');
-    this.refs.video.pause();
+    if (this.isYt) {
+      ytCtrl.pause();
+    } else {
+      this.refs.video.pause();
+    }
+
     window.AppData.playing = false;
   },
   mute: function() {
     sendMetricsEvent('player_view', 'mute');
-    this.refs.video.muted = true;
+
+    if (this.isYt) {
+      ytCtrl.mute();
+    } else {
+      this.refs.video.muted = true;
+    }
+
     window.AppData = Object.assign(window.AppData, {
       muted: true,
       volume: 0
@@ -70,15 +101,29 @@ module.exports = React.createClass({
   },
   unmute: function() {
     sendMetricsEvent('player_view', 'unmute');
-    this.refs.video.muted = false;
+    let volume;
+
+    if (this.isYt) {
+      ytCtrl.unmute();
+      volume = ytCtrl.getVolume();
+    } else {
+      this.refs.video.muted = false;
+      volume = this.refs.video.volume
+    }
+
     window.AppData = Object.assign(window.AppData, {
       muted: false,
-      volume: this.refs.video.volume
+      volume: volume
     });
   },
   setVolume: function(ev) {
     const muted = (ev.target.value === 0);
-    this.refs.video.volume = ev.target.value;
+
+    if (this.isYt) {
+      ytCtrl.setVolume(ev.target.value);
+    } else {
+      this.refs.video.volume = ev.target.value;
+    }
 
     window.AppData = Object.assign(window.AppData, {
       muted: muted,
@@ -89,11 +134,21 @@ module.exports = React.createClass({
     const x = ev.pageX - ev.target.offsetLeft;
     const clickedValue = x * ev.target.max / ev.target.offsetWidth;
 
-    this.refs.video.currentTime = this.refs.video.duration * clickedValue;
+    if (this.isYt) {
+      ytCtrl.setTime(window.AppData.duration * clickedValue);
+    } else {
+      this.refs.video.currentTime = window.AppData.duration * clickedValue;
+    }
   },
   replay: function() {
     sendMetricsEvent('player_view', 'replay');
-    this.refs.video.currentTime = 0;
+
+    if (this.isYt) {
+      ytCtrl.setTime(0);
+    } else {
+      this.refs.video.currentTime = 0;
+    }
+
     this.step(); // step once to set currentTime of window.AppData and progress
     this.play();
   },
@@ -110,11 +165,15 @@ module.exports = React.createClass({
     this.setState({hovered: false});
   },
   hasExited: function() {
-    if (!this.refs.video) return false;
-    return (!this.props.playing && (this.refs.video.currentTime >= this.props.duration));
+    if (!this.refs.video || !window.AppData.loaded) return false;
+    const currentTime = this.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
+    return (!this.props.playing && (currentTime >= this.props.duration));
   },
   render: function() {
-    sendMetricsEvent('player_view', 'render');
+    const videoEl = this.isYt ?
+          (<iframe id={'video'} ref={'video'} src={this.props.src} />) :
+          (<video id={'video'} ref={'video'} src={this.props.src} autoplay={false} />);
+
     return (
         <div className={'video-wrapper'} onMouseEnter={this.enterPlayer}
              onMouseLeave={this.leavePlayer}>
@@ -136,7 +195,7 @@ module.exports = React.createClass({
                      onChange={this.setVolume}/>
             </div>
 
-            <GeneralControls props={this.props} />
+            <GeneralControls {...this.props} isYt={this.isYt} />
           </div>
 
           <div className={cn('exited', {hidden: !this.hasExited()})}>
@@ -153,7 +212,7 @@ module.exports = React.createClass({
                       value={this.props.progress + ''}  />
           </div>
 
-          <video id={'video'} ref={'video'} src={this.props.src} autoplay={false} />
+          {videoEl}
         </div>
     );
   }
