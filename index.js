@@ -160,7 +160,7 @@ cm.Item({
   context: cm.SelectorContext(getSelectors('youtube')),
   contentScript: contextMenuContentScript,
   onMessage: (url) => {
-    sendMetricsData({changed: 'activate', domain: 'youtube.com'});
+    sendMetricsData({method: 'activate', domain: 'youtube.com'});
     launchVideo({url: url,
                  domain: 'youtube.com',
                  getUrlFn: getYouTubeUrl});
@@ -175,7 +175,7 @@ cm.Item({
   ],
   contentScript: contextMenuContentScript,
   onMessage: (url) => {
-    sendMetricsData({changed: 'activate', domain: 'youtube.com'});
+    sendMetricsData({method: 'activate', domain: 'youtube.com'});
     launchVideo({url: url,
                  domain: 'youtube.com',
                  getUrlFn: getYouTubeUrl});
@@ -187,7 +187,7 @@ cm.Item({
   context: cm.SelectorContext(getSelectors('vimeo')),
   contentScript: contextMenuContentScript,
   onMessage: (url)=> {
-    sendMetricsData({changed: 'activate', domain: 'vimeo.com'});
+    sendMetricsData({method: 'activate', domain: 'vimeo.com'});
     launchVideo({url: url,
                  domain: 'vimeo.com',
                  getUrlFn: getVimeoUrl});
@@ -199,7 +199,7 @@ cm.Item({
   context: cm.SelectorContext(getSelectors('vine')),
   contentScript: contextMenuContentScript,
   onMessage: function(url) {
-    sendMetricsData({changed: 'activate', domain: 'vine.co'});
+    sendMetricsData({method: 'activate', domain: 'vine.co'});
     launchVideo({url: url,
                  domain: 'vine.co',
                  getUrlFn: getVineUrl});
@@ -300,11 +300,25 @@ pageMod.PageMod({
     worker.port.on('launch', function(opts) {
       if (opts.domain.indexOf('youtube.com') > -1) {
         opts.getUrlFn = getYouTubeUrl;
+        sendMetricsData({
+          object: 'overlay_icon',
+          method: 'launch',
+          domain: opts.domain
+        });
         launchVideo(opts);
       } else if (opts.domain.indexOf('vimeo.com')  > -1) {
         opts.getUrlFn = getVimeoUrl;
+        sendMetricsData({
+          object: 'overlay_icon',
+          method: 'launch',
+          domain: opts.domain
+        });
         launchVideo(opts);
       }
+    });
+
+    worker.port.on('metrics', function(opts) {
+      sendMetricsData(opts);
     });
   }
 });

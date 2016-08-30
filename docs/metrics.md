@@ -66,6 +66,13 @@ otherwise noted.
   * method: `maximize`
   * method: `close`
 
+* Object: `overlay_icon`
+  * method: `available`
+    * Sent when a video is available on a page.
+* Object: `overlay_icon`
+  * method: `launch`
+    * Sent when a video is launched from the overlay icon.
+
 Here's an example of a complete Test Pilot telemetry ping. Note that min-vid only sends the
 `payload` portion to the Test Pilot add-on. The Test Pilot add-on appends the `test` and `agent`
 fields, transforms the `timestamp` from a standard JavaScript milliseconds-since-epoch time
