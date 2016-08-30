@@ -11,6 +11,9 @@
   "engines": {
     "firefox": ">=38.0a1"
   },
+  "permissions": {
+    "multiprocess": true
+  },
   "bugs": {
     "url": "https://github.com/meandavejustice/min-vid/issues"
   },
