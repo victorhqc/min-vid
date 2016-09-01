@@ -1,7 +1,7 @@
 {
   "title": "min-vid",
   "name": "min-vid",
-  "version": "0.1.1",
+  "version": "0.1.3-dev-ef28ace",
   "private": true,
   "description": "minimize web videos",
   "homepage": "https://github.com/meandavejustice/min-vid",
@@ -26,7 +26,8 @@
     "package": "npm run build-script && jpm xpi && mv min-vid.xpi dist/addon.xpi",
     "postpackage": "addons-linter dist/addon.xpi -o text",
     "prepackage": "npm run lint",
-    "dev": "npm run watch-script & npm run watch & http-server -c-1"
+    "dev": "npm run watch-script & npm run watch & http-server -c-1",
+    "deploy": "./bin/update-version && npm run package && ./bin/sign"
   },
   "precommit": "build-script, package",
   "license": "MPL-2.0",
