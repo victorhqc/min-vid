@@ -220,6 +220,7 @@ input[type=range]::-moz-focus-outer {
     height: 50px;
     padding-top: 6px;  
     position: absolute;
+    width: 100%;
 }
 
 .progress span {
@@ -229,7 +230,6 @@ input[type=range]::-moz-focus-outer {
 
 .video-progress {
     background: #ffffffaa;
-    border-radius: 20px;
     border: none;
     height: 10px;
     margin-top: 6px;
@@ -239,7 +239,6 @@ input[type=range]::-moz-focus-outer {
 .video-progress[value]::-moz-progress-bar {
     appearance: none;
     background: #4789d7;
-    border-radius: 20px;
     border: none;
 }
 
