@@ -20,6 +20,7 @@ if ((host.indexOf('youtube.com') > -1) && ytHomeContainers.length) {
     });
     el.appendChild(tmp);
   });
+  sendMetric('available');
 }
 
 // YOUTUBE WATCH PAGE
@@ -35,6 +36,7 @@ if ((host.indexOf('youtube.com') > -1) && ytWatchContainer) {
     });
   });
   ytWatchContainer.appendChild(tmp);
+  sendMetric('available');
 }
 
 // VIMEO HOME PAGE
@@ -55,6 +57,7 @@ if ((host.indexOf('vimeo.com') > -1)  && vimeoHomeContainers.length) {
     });
     el.appendChild(tmp);
   });
+  sendMetric('available');
 }
 
 // VIMEO DETAIL PAGE
@@ -71,6 +74,7 @@ if ((host.indexOf('vimeo.com') > -1)  && vimeoDetailContainer) {
     });
   }, true);
   vimeoDetailContainer.appendChild(tmp);
+  sendMetric('available');
 }
 
 function getTemplate() {
@@ -82,6 +86,14 @@ function getTemplate() {
 
   containerEl.appendChild(iconEl);
   return containerEl;
+}
+
+function sendMetric(method) {
+  self.port.emit('metric', {
+    object: 'overlay_icon',
+    method: method,
+    domain: host
+  });
 }
 
 function evNoop(ev) {
