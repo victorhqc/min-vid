@@ -60,7 +60,8 @@ module.exports = React.createClass({
           else if (ev.data === PAUSED && this.props.playing) this.pause();
         },
         onError: (err) => {
-          window.AppData.error = true;
+          const url = `https://youtube.com/watch?v=${this.props.id}`;
+          window.AppData.error = `There was an error loading your video from ${url}`;
           console.error('Error: ytCtrl: ', err); // eslint-disable-line no-console
         }
       });
