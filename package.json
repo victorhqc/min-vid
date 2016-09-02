@@ -19,7 +19,7 @@
     "url": "https://github.com/meandavejustice/min-vid/issues"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . bin/*",
     "build-script": "browserify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
     "watch-script": "watchify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
     "start": "npm run watch",

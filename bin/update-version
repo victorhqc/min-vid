@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var util = require('util');
-var childProcess = require('child_process');
+const fs = require('fs');
+const childProcess = require('child_process');
 
 // Load the current manifest.json
-var manifestFilename = __dirname + '/../package.json';
-var manifest = require(manifestFilename);
+const manifestFilename = __dirname + '/../package.json';
+const manifest = require(manifestFilename);
 
 // Come up with a version tag suffix based on CIRCLE_TAG, or fall back to
 // looking up the current git commit hash.
-var tag;
+let tag;
 if (process.env['CIRCLE_TAG']) {
   tag = 'tag-' + process.env['CIRCLE_TAG'];
 } else {
@@ -21,9 +20,9 @@ if (process.env['CIRCLE_TAG']) {
 }
 
 // Update the version tag suffix.
-var versionParts = manifest.version.split('-');
+const versionParts = manifest.version.split('-');
 manifest.version = versionParts[0] + '-' + tag;
 
 // Write the modified manifest.json
-var manifestJSON = JSON.stringify(manifest, null, '  ');
+const manifestJSON = JSON.stringify(manifest, null, '  ');
 fs.writeFileSync(manifestFilename, manifestJSON);
