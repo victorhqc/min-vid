@@ -46,7 +46,7 @@ module.exports = React.createClass({
     requestAnimationFrame(this.step);
   },
   componentWillMount: function() {
-    this.isYt = this.props.domain === 'youtube.com';
+    this.isYt = !!~this.props.domain.indexOf('youtube.com');
   },
   componentDidMount: function() {
     const PLAYING = window.YT.PlayerState.PLAYING;
