@@ -17,7 +17,8 @@ function init(id, opts) {
   window.YTPlayer = new window.YT.Player(id, {
     events: {
       onReady: opts.onReady,
-      onError: opts.onError
+      onError: opts.onError,
+      onStateChange: opts.onStateChange
     }
   });
 }

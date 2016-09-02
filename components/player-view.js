@@ -49,9 +49,16 @@ module.exports = React.createClass({
     this.isYt = this.props.domain === 'youtube.com';
   },
   componentDidMount: function() {
+    const PLAYING = window.YT.PlayerState.PLAYING;
+    const PAUSED = window.YT.PlayerState.PAUSED;
+
     if (this.isYt) {
       ytCtrl.init('video', {
         onReady: this.onLoaded,
+        onStateChange: (ev) => {
+          if (ev.data === PLAYING && !this.props.playing) this.play();
+          else if (ev.data === PAUSED && this.props.playing) this.pause();
+        },
         onError: (err) => {
           window.AppData.error = true;
           console.error('Error: ytCtrl: ', err); // eslint-disable-line no-console
