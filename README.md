@@ -1,4 +1,9 @@
-# Min Vid
+<p align="center">
+  <a href="https://testpilot.firefox.com/experiments/min-vid">
+    <img width="300" src="docs/images/gradient-logo.png">
+  </a>
+  <h2 align="center">Min Vid</h2>
+</p>
 
 [![Build Status](https://travis-ci.org/meandavejustice/min-vid.svg?branch=master)](https://travis-ci.org/meandavejustice/min-vid)
 
@@ -14,40 +19,41 @@ such as audio or pdfs.
 
 ## Installation
 
-We are still in the development phase with this experiment, you will
-need to navigate to `about:config` and set the `xpinstall.signatures.required`
-option to `true`, in order to install the addon. From there, you may download
-the addon from [dist/addon.xpi](dist/addon.xpi) in this repo. And
-install it by dragging it onto the `about:addons` page.
-
+* `npm run package`
 * set `xpinstall.signatures.required` in `about:config`
-* download xpi from [our temporary location](https://people.mozilla.org/~jhirsch/min-vid-addon/addon.xpi)
 * install xpi by dragging onto the `about:addons` page
+
+
+**note**
+The `xpinstall.signatures.required` option in `about:config` needs to
+be set in order to install unsigned addons.
 
 ## Usage
 
-Once you have the addon installed, you will be able to right click on
-video links(youtube supported, others coming soon) and select the
-`send to mini player` option from the context menu.
+Once the addon is installed you are able to launch Min Vid from the
+overlay icon over videos on YouTube and Vimeo.
 
-![context menu option](docs/images/send-to-player.png)
+You can also launch Min Vid by right clicking on a video link and
+sending to the player from the context menu.
+
+<img width="650" src="docs/images/send-to-player.png">
 
 <br>
 <hr>
 <br>
 
 You can switch tabs and continue browsing as usual
-![playing example](docs/images/playing.png)
+<img width="650" src="docs/images/playing.png">
 
 <br>
 <hr>
 <br>
 
 You may also minimize the video while still controlling playback
-![minimized example](docs/images/minimized.png)
+<img width="650" src="docs/images/minimized.png">
 
 ## Development
-This is a proof of concept, there are bugs. contributions welcome. To get started,
+Contributions welcome. To get started,
 
 1.  Clone the repo:
 
@@ -58,11 +64,7 @@ This is a proof of concept, there are bugs. contributions welcome. To get starte
 
 3. install [autoinstaller addon](https://addons.mozilla.org/en-US/firefox/addon/autoinstaller/)
 
-4. `npm run watch` to watch for file changes while developing.
-
-5. Before submitting a Pull Request, package the Add-on:
-
-   `npm run package`
+4. `npm run dev` to watch for file changes while developing.
 
 
 ## LICENSE
