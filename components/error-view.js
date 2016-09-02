@@ -24,6 +24,7 @@ module.exports = React.createClass({
           <img src={'img/sadface.png'}
                alt={'sadface because of error'}
                width={164} height={164}></img>
+          <p className="error-message">{this.props.error}</p>
         </div>
     );
   }

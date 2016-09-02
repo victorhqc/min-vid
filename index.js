@@ -34,7 +34,10 @@ panel.port.on('addon-message', opts => {
   if (title === 'send-to-tab') {
     const pageUrl = getPageUrl(opts.domain, opts.id, opts.time);
     if (pageUrl) require('sdk/tabs').open(pageUrl);
-    else console.error('could not parse page url for ', opts); // eslint-disable-line no-console
+    else {
+      console.error('could not parse page url for ', opts); // eslint-disable-line no-console
+      panel.port.emit('set-video', {error: 'Error loading video from ' + opts.domain});
+    }
     panel.port.emit('set-video', {domain: '', src: ''});
     panel.hide();
   } else if (title === 'close') {
