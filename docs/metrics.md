@@ -6,13 +6,13 @@ Images are used for visualization and are not composed of actual data.
 
 ### Do people want to use this?
 
-What is the overall usage of min-vid?  **This is the standard DAU/MAU
-analysis.**  This graph reports overall installations of min-vid, but does not
+What is the overall usage of Min Vid?  **This is the standard DAU/MAU
+analysis.**  This graph reports overall installations of Min Vid, but does not
 report actual usage of the add-on's functionality.
 
 ![](images/kpi-1.png)
 
-On pages where compatible video elements exist and are playing, how often is min-vid initialized?
+On pages where compatible video elements exist and are playing, how often is Min Vid initialized?
 
 ![](images/kpi-2.png)
 
@@ -26,19 +26,19 @@ On pages where compatible video elements exist and are playing, how often is min
 
 ## Data Collection
 
-Min-vid has no server side component, so all data is gathered on the client and
-reported via Firefox's Telemetry System. min-vid will not do any batching on
+Min Vid has no server side component, so all data is gathered on the client and
+reported via Firefox's Telemetry System. Min Vid will not do any batching on
 the client side, instead sending pings immediately.
 
 ### Event types
 
-Here is the complete set of object/method event pairs sent by min-vid.
+Here is the complete set of object/method event pairs sent by Min Vid.
 The events are tied to button clicks (like 'play' or 'pause') unless
 otherwise noted.
 
 * Object: `contextmenu`
   * method: `activate`
-    * Sent when the user right-clicks a video and sends it to the min-vid player.
+    * Sent when the user right-clicks a video and sends it to the Min Vid player.
 
 * Object: `error_view`
   * method: `render`
@@ -73,7 +73,7 @@ otherwise noted.
   * method: `launch`
     * Sent when a video is launched from the overlay icon.
 
-Here's an example of a complete Test Pilot telemetry ping. Note that min-vid only sends the
+Here's an example of a complete Test Pilot telemetry ping. Note that Min Vid only sends the
 `payload` portion to the Test Pilot add-on. The Test Pilot add-on appends the `test` and `agent`
 fields, transforms the `timestamp` from a standard JavaScript milliseconds-since-epoch time
 to the number of seconds since Firefox app startup, and wraps the payload under the `payload` key.
@@ -91,13 +91,13 @@ to the number of seconds since Firefox app startup, and wraps the payload under 
     "played_count": 2,               // count of full video playback
 
     "video_x": 1200,                 // Distance in pixels from top of browser window
-                                     // to top of min-vid panel
+                                     // to top of Min Vid panel
     "video_y": 1150,                 // Distance in pixels from left side of browser
-                                     // window to left side of min-vid panel
-    "video_width": 300,              // Width of min-vid player, in pixels
-    "video_height": 110,             // Height of min-vid panel, in pixels
+                                     // window to left side of Min Vid panel
+    "video_width": 300,              // Width of Min Vid player, in pixels
+    "video_height": 110,             // Height of Min Vid panel, in pixels
     "timestamp": 1470                // Timestamp in seconds since Firefox started (note:
-                                     // min-vid sends over a regular JS millisecond timestamp,
+                                     // Min Vid sends over a regular JS millisecond timestamp,
                                      // the Test Pilot add-on converts it to seconds since startup)
   }
 }
