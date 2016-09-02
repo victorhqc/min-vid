@@ -1,8 +1,8 @@
-# Min-Vid
+# Min Vid
 
 [![Build Status](https://travis-ci.org/meandavejustice/min-vid.svg?branch=master)](https://travis-ci.org/meandavejustice/min-vid)
 
-Min-Vid is a Firefox add-on which lets you minimize a web video and
+Min Vid is a Firefox add-on which lets you minimize a web video and
 keep it within the browser window. The video panel stays visible even
 when you switch tabs, so you can keep watching while you browse.
 

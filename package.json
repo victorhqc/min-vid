@@ -1,9 +1,9 @@
 {
-  "title": "min-vid",
+  "title": "Min Vid",
   "name": "min-vid",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
-  "description": "minimize web videos",
+  "description": "Minimize a web video into a small always-on-top panel in Firefox.",
   "homepage": "https://github.com/meandavejustice/min-vid",
   "repository": "meandavejustice/min-vid",
   "main": "index.js",
