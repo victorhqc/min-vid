@@ -31,7 +31,7 @@
     "dev": "npm run watch-script & npm run watch & http-server -c-1",
     "deploy": "npm run package && ./bin/sign"
   },
-  "precommit": "build-script, package",
+  "precommit": "package",
   "license": "MPL-2.0",
   "dependencies": {
     "get-video-id": "1.0.0"
