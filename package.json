@@ -1,15 +1,14 @@
 {
   "title": "min-vid",
   "name": "min-vid",
-  "version": "0.1.3-dev-9313abe",
+  "version": "0.1.4",
   "private": true,
   "description": "minimize web videos",
   "homepage": "https://github.com/meandavejustice/min-vid",
   "repository": "meandavejustice/min-vid",
   "main": "index.js",
   "author": "meandave",
-  "updateURL": "https://testpilot.firefox.com/files/min-vid/update.rdf",
-  "updateLink": "https://testpilot.firefox.com/files/min-vid/addon.xpi",
+  "updateURL": "https://testpilot.firefox.com/files/min-vid/updates.json",
   "engines": {
     "firefox": ">=38.0a1"
   },
@@ -25,13 +24,12 @@
     "watch-script": "watchify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
     "start": "npm run watch",
     "watch": "jpm watchpost --post-url http://localhost:8888",
-    "package": "npm run build-script && jpm xpi && npm run mv-xpi && npm run mv-rdf",
+    "package": "npm run build-script && jpm xpi && npm run mv-xpi",
     "mv-xpi": "mv min-vid.xpi dist/addon.xpi",
-    "mv-rdf": "mv @min-vid*.update.rdf dist/update.rdf",
     "postpackage": "addons-linter dist/addon.xpi -o text",
     "prepackage": "npm run lint",
     "dev": "npm run watch-script & npm run watch & http-server -c-1",
-    "deploy": "./bin/update-version && npm run package && ./bin/sign"
+    "deploy": "npm run package && ./bin/sign"
   },
   "precommit": "build-script, package",
   "license": "MPL-2.0",
