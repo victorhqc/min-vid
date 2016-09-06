@@ -12,20 +12,22 @@
  * them into the /dist directory.
  *
  */
-var fs = require('fs');
-var path = require('path');
-var request = require('request');
-var jwt = require('jsonwebtoken');
-var manifest = require('../package.json');
-var version = manifest.version;
-var apiKey = process.env['AMO_USER'];
-var apiSecret = process.env['AMO_SECRET'];
-var authToken = jwt.sign({iss: apiKey}, apiSecret, {
-  algorithm: "HS256",
+
+/* eslint-disable no-console */
+
+const fs = require('fs');
+const request = require('request');
+const jwt = require('jsonwebtoken');
+const manifest = require('../package.json');
+const version = manifest.version;
+const apiKey = process.env['AMO_USER'];
+const apiSecret = process.env['AMO_SECRET'];
+const authToken = jwt.sign({iss: apiKey}, apiSecret, {
+  algorithm: 'HS256',
   expiresIn: 60
 });
-var signedOpts = {
-  url: 'https://addons.mozilla.org/api/v3/addons/@' + manifest.name + '/versions/'+version+ '/',
+const signedOpts = {
+  url: 'https://addons.mozilla.org/api/v3/addons/@' + manifest.name + '/versions/' + version + '/',
   headers: {
     'Authorization': 'JWT ' + authToken
   }
@@ -34,10 +36,10 @@ var signedOpts = {
 request(signedOpts, signCb);
 
 function signCb(err, resp, body) {
-  if (!err && resp.statusCode == 200) {
-    var info = JSON.parse(body);
+  if (!err && resp.statusCode === 200) {
+    const info = JSON.parse(body);
     if (info.files.length) {
-      var ws = fs.createWriteStream('dist/signed-addon.xpi').on('finish', removeGeneratedXpi);
+      const ws = fs.createWriteStream('dist/signed-addon.xpi').on('finish', removeGeneratedXpi);
       signedOpts.url = info.files[0].download_url;
       request(signedOpts).pipe(ws);
     }
@@ -47,7 +49,7 @@ function signCb(err, resp, body) {
 // if we need to sign and distribute our add-on, we want to use this method
 function distAddon() {
   // sign our add-on
-  var generatedXpi = 'dist/addon.xpi';
+  const generatedXpi = 'dist/addon.xpi';
   signAddon(generatedXpi, function(err, signedXpiPath) {
     if (err) return console.error(err);
     // remove our generated xpi since we now have a signed version
@@ -62,7 +64,7 @@ function distAddon() {
 }
 
 function removeGeneratedXpi() {
-  var generatedXpi = 'dist/addon.xpi';
+  const generatedXpi = 'dist/addon.xpi';
   fs.unlink(generatedXpi, function(err) {
     if (err) console.error(err);
     else console.log('removed ' + generatedXpi + ' successfully');
