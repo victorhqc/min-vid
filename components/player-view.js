@@ -102,33 +102,25 @@ module.exports = React.createClass({
       this.refs.video.muted = true;
     }
 
-    window.AppData = Object.assign(window.AppData, {
-      muted: true,
-      volume: 0
-    });
+    window.AppData = Object.assign(window.AppData, {muted: true});
   },
   unmute: function() {
     sendMetricsEvent('player_view', 'unmute');
-    let volume;
 
     if (this.isYt) {
       ytCtrl.unmute();
-      volume = ytCtrl.getVolume();
+      ytCtrl.setVolume(window.AppData.volume * 100);
     } else {
       this.refs.video.muted = false;
-      volume = this.refs.video.volume
     }
 
-    window.AppData = Object.assign(window.AppData, {
-      muted: false,
-      volume: volume
-    });
+    window.AppData = Object.assign(window.AppData, {muted: false});
   },
   setVolume: function(ev) {
     const muted = (ev.target.value === 0);
 
     if (this.isYt) {
-      ytCtrl.setVolume(ev.target.value);
+      ytCtrl.setVolume(parseFloat(ev.target.value) * 100);
     } else {
       this.refs.video.volume = ev.target.value;
     }
@@ -199,7 +191,7 @@ module.exports = React.createClass({
               <a onClick={this.unmute} data-tip='Unmute'
                  className={cn('unmute', {hidden: !this.props.muted})} />
               <input type='range' className={cn('volume', {hidden: !this.state.showVolume})}
-                     min='0' max='1' step='.01' value={this.props.volume}
+                     min='0' max='1' step='.01' value={this.props.muted ? 0 : this.props.volume}
                      onChange={this.setVolume}/>
             </div>
 
