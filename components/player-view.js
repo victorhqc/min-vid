@@ -4,6 +4,7 @@ const cn = require('classnames');
 
 const ytCtrl = require('../client-lib/yt-ctrl.js');
 const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
+const sendToAddon = require('../client-lib/send-to-addon.js');
 const GeneralControls = require('./general-controls.js');
 
 function formatTime(seconds) {
@@ -26,9 +27,14 @@ module.exports = React.createClass({
       progress: currentTime / window.AppData.duration
     });
 
-    if (currentTime >= window.AppData.duration) {
-      window.AppData.playing = false;
-      window.AppData.playedCount++;
+    // TODO: the "-1" is a hack to force YouTube embeds to do what we
+    // want. #184
+    if (currentTime >= window.AppData.duration - 1) {
+      window.AppData = Object.assign(window.AppData, {
+        playing: false,
+        playedCount: (window.AppData.playedCount + 1)
+      });
+
       sendMetricsEvent('player_view', 'video_ended');
     }
 
@@ -49,10 +55,10 @@ module.exports = React.createClass({
     this.isYt = !!~this.props.domain.indexOf('youtube.com');
   },
   componentDidMount: function() {
-    const PLAYING = window.YT.PlayerState.PLAYING;
-    const PAUSED = window.YT.PlayerState.PAUSED;
-
     if (this.isYt) {
+      const PLAYING = window.YT.PlayerState.PLAYING;
+      const PAUSED = window.YT.PlayerState.PAUSED;
+
       ytCtrl.init('video', {
         onReady: this.onLoaded,
         onStateChange: (ev) => {
@@ -71,8 +77,12 @@ module.exports = React.createClass({
     }
   },
   play: function() {
-    if (this.hasExited()) {
-      return this.replay();
+    if (this.hasExited() && !this.isYt) {
+      if (!this.isYt) {
+        return this.replay();
+      } else {
+        sendMetricsEvent('player_view', 'replay');
+      }
     }
     sendMetricsEvent('player_view', 'play');
     if (this.isYt) {
@@ -142,15 +152,13 @@ module.exports = React.createClass({
   },
   replay: function() {
     sendMetricsEvent('player_view', 'replay');
-
-    if (this.isYt) {
-      ytCtrl.setTime(0);
-    } else {
-      this.refs.video.currentTime = 0;
-    }
-
+    this.refs.video.currentTime = 0;
     this.step(); // step once to set currentTime of window.AppData and progress
     this.play();
+  },
+  close: function() {
+    sendMetricsEvent('player_view', 'close');
+    sendToAddon({action: 'close'});
   },
   enterControls: function() {
     this.setState({showVolume: true});
@@ -167,7 +175,7 @@ module.exports = React.createClass({
   hasExited: function() {
     if (!this.refs.video || !window.AppData.loaded) return false;
     const currentTime = this.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
-    return (!this.props.playing && (currentTime >= this.props.duration));
+    return (!this.props.playing && (currentTime >= this.props.duration - 1)); // TODO: the "-1" is a hack to force YouTube embeds to do what we want. #184
   },
   render: function() {
     const videoEl = this.isYt ?
