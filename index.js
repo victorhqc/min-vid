@@ -12,6 +12,7 @@ const launchVideo = require('./lib/launch-video');
 const sendMetricsData = require('./lib/send-metrics-data.js');
 const initContextMenuHandlers = require('./lib/context-menu-handlers.js');
 // const makePanelDraggable = require('./lib/make-panel-draggable.js');
+const { getActiveView } = require('sdk/view/core');
 
 const panel = require('sdk/panel').Panel({
   contentURL: './default.html',
@@ -23,6 +24,8 @@ const panel = require('sdk/panel').Panel({
     left: 10
   }
 });
+
+getActiveView(panel).setAttribute('noautohide', true);
 
 // check for linux here
 // if (system.platform !== 'linux') {
