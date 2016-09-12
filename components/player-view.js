@@ -44,6 +44,13 @@ module.exports = React.createClass({
     sendMetricsEvent('player_view', 'video_loaded');
     const duration = this.isYt ? ytCtrl.getDuration() : this.refs.video.duration;
 
+    // set initial volume
+    this.setVolume({
+      target: {
+        value: this.props.volume
+      }
+    });
+
     window.AppData = Object.assign(window.AppData, {
       loaded: true,
       duration: duration
