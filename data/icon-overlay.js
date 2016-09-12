@@ -19,18 +19,20 @@ function checkForEmbeds() {
 }
 
 function ytEmbedChecks() {
+  if (!(host.indexOf('youtube.com') > -1)) return;
+
   // YouTube Home Page
   const ytHomeContainers = Array.from(document.querySelectorAll('#feed .yt-lockup-thumbnail'));
-  if ((host.indexOf('youtube.com') > -1) && ytHomeContainers.length) {
+  if (ytHomeContainers.length) {
     sendMetric('available');
     ytHomeContainers.forEach(ytHomePageHandler);
   }
 
   // YouTube Watch Page
   const ytWatchContainer = document.querySelector('.html5-video-player');
-  if ((host.indexOf('youtube.com') > -1) && ytWatchContainer) {
-    ytWatchElementHandler(ytWatchContainer);
+  if (ytWatchContainer) {
     sendMetric('available');
+    ytWatchElementHandler(ytWatchContainer);
   }
 }
 
@@ -68,9 +70,31 @@ function ytWatchElementHandler(el) {
 }
 
 function vimeoEmbedChecks() {
-  // VIMEO HOME PAGE
+  if (!(host.indexOf('vimeo.com') > -1)) return;
+
+  // VIMEO LOGGED-OUT HOME PAGE
+  const vimeoDefaultHomeContainers = Array.from(document.querySelectorAll('.iris_video-vital__overlay'));
+  if (vimeoDefaultHomeContainers.length) {
+    vimeoDefaultHomeContainers.forEach(el => {
+      if (el.classList.contains('minvid__overlay__wrapper')) return;
+
+      el.classList.add('minvid__overlay__wrapper');
+      const tmp = getTemplate();
+      tmp.addEventListener('click', function(ev) {
+        evNoop(ev);
+        self.port.emit('launch', {
+          url: 'https://vimeo.com' + el.getAttribute('href'),
+          domain: host
+        });
+      });
+      el.appendChild(tmp);
+    });
+    sendMetric('available');
+  }
+
+  // VIMEO LOGGED-IN HOME PAGE
   const vimeoHomeContainers = Array.from(document.querySelectorAll('.player_wrapper'));
-  if ((host.indexOf('vimeo.com') > -1)  && vimeoHomeContainers.length) {
+  if (vimeoHomeContainers.length) {
     vimeoHomeContainers.forEach(el => {
       if (el.classList.contains('minvid__overlay__wrapper')) return;
 
@@ -93,9 +117,8 @@ function vimeoEmbedChecks() {
 
   // VIMEO DETAIL PAGE
   const vimeoDetailContainer = document.querySelector('.video-wrapper');
-  if ((host.indexOf('vimeo.com') > -1)  && vimeoDetailContainer) {
+  if (vimeoDetailContainer) {
     if (vimeoDetailContainer.classList.contains('minvid__overlay__wrapper')) return;
-
     vimeoDetailContainer.classList.add('minvid__overlay__wrapper');
     const tmp = getTemplate();
     tmp.addEventListener('mouseup', evNoop);
