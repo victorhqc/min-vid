@@ -35,6 +35,8 @@ function ytEmbedChecks() {
 }
 
 function ytHomePageHandler(el) {
+  if (el.classList.contains('minvid__overlay__wrapper')) return;
+
   el.classList.add('minvid__overlay__wrapper');
   const tmp = getTemplate();
   tmp.addEventListener('click', function(ev) {
@@ -51,6 +53,8 @@ function ytHomePageHandler(el) {
 }
 
 function ytWatchElementHandler(el) {
+  if (el.classList.contains('minvid__overlay__wrapper')) return;
+
   el.classList.add('minvid__overlay__wrapper');
   const tmp = getTemplate();
   tmp.addEventListener('click', function(ev) {
@@ -68,6 +72,8 @@ function vimeoEmbedChecks() {
   const vimeoHomeContainers = Array.from(document.querySelectorAll('.player_wrapper'));
   if ((host.indexOf('vimeo.com') > -1)  && vimeoHomeContainers.length) {
     vimeoHomeContainers.forEach(el => {
+      if (el.classList.contains('minvid__overlay__wrapper')) return;
+
       el.classList.add('minvid__overlay__wrapper');
       const tmp = getTemplate();
       tmp.addEventListener('click', function(ev) {
@@ -88,6 +94,8 @@ function vimeoEmbedChecks() {
   // VIMEO DETAIL PAGE
   const vimeoDetailContainer = document.querySelector('.video-wrapper');
   if ((host.indexOf('vimeo.com') > -1)  && vimeoDetailContainer) {
+    if (vimeoDetailContainer.classList.contains('minvid__overlay__wrapper')) return;
+
     vimeoDetailContainer.classList.add('minvid__overlay__wrapper');
     const tmp = getTemplate();
     tmp.addEventListener('mouseup', evNoop);
