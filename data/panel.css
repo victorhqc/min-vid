@@ -6,8 +6,7 @@
 
 html,
 body,
-iframe,
-video {
+#video {
     border: none;
     margin: 0;
     padding: 0;
@@ -15,8 +14,7 @@ video {
 
 html,
 body,
-video,
-iframe,
+#video,
 .player-wrap,
 .app,
 .loading,
@@ -26,10 +24,14 @@ iframe,
 }
 
 html,
-iframe,
-body {
+body,
+#video {
     background: transparent;
     text-align: center;
+}
+
+#video {
+    pointer-events: none;
 }
 
 .app {

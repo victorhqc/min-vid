@@ -177,14 +177,20 @@ module.exports = React.createClass({
     const currentTime = this.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
     return (!this.props.playing && (currentTime >= this.props.duration - 1)); // TODO: the "-1" is a hack to force YouTube embeds to do what we want. #184
   },
+  handleVideoClick: function(ev) {
+    if (!ev.target.classList.contains('video-wrapper')) return;
+    if (this.props.playing) this.pause();
+    else this.play();
+  },
   render: function() {
+    const noop = () => false;
     const videoEl = this.isYt ?
-          (<iframe id={'video'} ref={'video'} src={this.props.src} />) :
-          (<video id={'video'} ref={'video'} src={this.props.src} autoplay={false} />);
+          (<iframe id={'video'} ref={'video'} src={this.props.src} onContextMenu={noop} />) :
+          (<video id={'video'} ref={'video'} src={this.props.src} autoplay={false} onContextMenu={noop} />);
 
     return (
         <div className={'video-wrapper'} onMouseEnter={this.enterPlayer}
-             onMouseLeave={this.leavePlayer}>
+             onMouseLeave={this.leavePlayer} onClick={this.handleVideoClick}>
           <div className={cn('controls', {hidden: !this.state.hovered, minimized: this.props.minimized})}
                onMouseEnter={this.enterControls} onMouseLeave={this.leaveControls}>
             <div className='left'>
