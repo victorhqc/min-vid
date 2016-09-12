@@ -1,6 +1,7 @@
 .*
 *
 !/data/**
+!/docs/images/gradient-logo.png
 !/lib/**
 !/index.js
 !/install.rdf
