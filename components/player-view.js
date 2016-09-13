@@ -148,6 +148,7 @@ module.exports = React.createClass({
     });
   },
   setTime: function(ev) {
+    ev.stopPropagation();
     const x = ev.pageX - ev.target.offsetLeft;
     const clickedValue = x * ev.target.max / ev.target.offsetWidth;
 
