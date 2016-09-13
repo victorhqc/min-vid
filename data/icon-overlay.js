@@ -47,7 +47,7 @@ function ytHomePageHandler(el) {
     if (urlEl && urlEl.getAttribute('href')) {
       self.port.emit('launch', {
         url: 'https://youtube.com' + urlEl.getAttribute('href'),
-        domain: host
+        domain: 'youtube.com'
       });
     } else console.error('Error parsing url from YT home page', el); // eslint-disable-line no-console
   });
@@ -63,7 +63,7 @@ function ytWatchElementHandler(el) {
     evNoop(ev);
     self.port.emit('launch', {
       url: window.location.href,
-      domain: host
+      domain: 'youtube.com'
     });
   });
   el.appendChild(tmp);
@@ -84,7 +84,7 @@ function vimeoEmbedChecks() {
         evNoop(ev);
         self.port.emit('launch', {
           url: 'https://vimeo.com' + el.getAttribute('href'),
-          domain: host
+          domain: 'vimeo.com'
         });
       });
       el.appendChild(tmp);
@@ -106,7 +106,7 @@ function vimeoEmbedChecks() {
         if (fauxEl) {
           self.port.emit('launch', {
             url: 'https://vimeo.com/' + fauxEl.getAttribute('data-clip-id'),
-            domain: host
+            domain: 'vimeo.com'
           });
         } else console.error('Error: failed to locate vimeo url'); // eslint-disable-line no-console
       });
@@ -126,7 +126,7 @@ function vimeoEmbedChecks() {
       evNoop(ev);
       self.port.emit('launch', {
         url: window.location.href,
-        domain: host
+        domain: 'vimeo.com'
       });
     }, true);
     vimeoDetailContainer.appendChild(tmp);
@@ -149,8 +149,7 @@ function getTemplate() {
 function sendMetric(method) {
   self.port.emit('metric', {
     object: 'overlay_icon',
-    method: method,
-    domain: host
+    method: method
   });
 }
 
