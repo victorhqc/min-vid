@@ -222,7 +222,7 @@ module.exports = React.createClass({
             <GeneralControls {...this.props} isYt={this.isYt} getTime={this.getTime}/>
           </div>
 
-          <div className={cn('exited', {hidden: !this.hasExited()})}>
+          <div className={cn('exited', {hidden: !this.hasExited() || this.props.minimized})}>
             <div className='row'>
               <button className='exit-replay' onClick={this.replay}></button>
               <button className='exit-close' onClick={this.close}></button>
