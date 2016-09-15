@@ -134,17 +134,18 @@ module.exports = React.createClass({
     window.AppData = Object.assign(window.AppData, {muted: false});
   },
   setVolume: function(ev) {
-    const muted = (ev.target.value === 0);
+    const value = parseFloat(ev.target.value);
+    const muted = (value === 0);
 
     if (this.isYt) {
-      ytCtrl.setVolume(parseFloat(ev.target.value) * 100);
+      ytCtrl.setVolume(value * 100);
     } else {
-      this.refs.video.volume = ev.target.value;
+      this.refs.video.volume = value;
     }
 
     window.AppData = Object.assign(window.AppData, {
       muted: muted,
-      volume: ev.target.value
+      volume: value
     });
   },
   setTime: function(ev) {
