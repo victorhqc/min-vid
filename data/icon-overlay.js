@@ -28,6 +28,12 @@ function ytEmbedChecks() {
     ytHomeContainers.forEach(ytHomePageHandler);
   }
 
+  const ytSearchContainers = Array.from(document.querySelectorAll('#results .yt-lockup-thumbnail'));
+  if (ytSearchContainers.length) {
+    sendMetric('available');
+    ytSearchContainers.forEach(ytHomePageHandler);
+  }
+
   // YouTube Watch Page
   const ytWatchContainer = document.querySelector('.html5-video-player');
   if (ytWatchContainer) {
