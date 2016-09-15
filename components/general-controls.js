@@ -1,6 +1,5 @@
 const React = require('react');
 const cn = require('classnames');
-const ytCtrl = require('../client-lib/yt-ctrl');
 const sendToAddon = require('../client-lib/send-to-addon');
 const sendMetricsEvent = require('../client-lib/send-metrics-event.js');
 
@@ -27,7 +26,7 @@ module.exports = React.createClass({
     let currentTime = 0;
 
     if (this.getView() === 'player_view') {
-      currentTime = this.props.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
+      currentTime = this.props.getTime();
     }
 
     sendToAddon({

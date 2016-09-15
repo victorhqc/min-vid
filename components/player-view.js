@@ -184,6 +184,9 @@ module.exports = React.createClass({
     const currentTime = this.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
     return (!this.props.playing && (currentTime >= this.props.duration - 1)); // TODO: the "-1" is a hack to force YouTube embeds to do what we want. #184
   },
+  getTime: function() {
+    return this.isYt ? ytCtrl.getTime() : this.refs.video.currentTime;
+  },
   handleVideoClick: function(ev) {
     if (!ev.target.classList.contains('video-wrapper')) return;
     if (this.props.playing) this.pause();
@@ -216,7 +219,7 @@ module.exports = React.createClass({
                      onChange={this.setVolume}/>
             </div>
 
-            <GeneralControls {...this.props} isYt={this.isYt} />
+            <GeneralControls {...this.props} isYt={this.isYt} getTime={this.getTime}/>
           </div>
 
           <div className={cn('exited', {hidden: !this.hasExited()})}>
