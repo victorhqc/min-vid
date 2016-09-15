@@ -30,7 +30,7 @@ body,
     text-align: center;
 }
 
-#video {
+video#video {
     pointer-events: none;
 }
 
