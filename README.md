@@ -1,8 +1,7 @@
 <p align="center">
   <a href="https://testpilot.firefox.com/experiments/min-vid">
-    <img width="300" src="docs/images/gradient-logo.png">
+    <img width="192" src="docs/images/gradient-logo.png">
   </a>
-  <h2 align="center">Min Vid</h2>
 </p>
 
 [![Build Status](https://travis-ci.org/meandavejustice/min-vid.svg?branch=master)](https://travis-ci.org/meandavejustice/min-vid)
