@@ -17,6 +17,17 @@ able to consume content in whatever mean they feel comfortable. In the
 future we may be exploring these concepts with other forms of media,
 such as audio or pdfs.
 
+## Usage
+
+Once the addon is installed you are able to launch Min Vid from the
+overlay icon over videos on YouTube and Vimeo.
+
+You can also launch Min Vid by right clicking on a video link and
+sending to the player from the context menu.
+
+<img src="docs/images/launching.gif" width="49%"/>
+<img src="docs/images/dragging.gif" width="49%"/>
+
 ## Installation
 
 * `npm run package`
@@ -27,19 +38,6 @@ such as audio or pdfs.
 **note**
 The `xpinstall.signatures.required` option in `about:config` needs to
 be set in order to install unsigned addons.
-
-## Usage
-
-Once the addon is installed you are able to launch Min Vid from the
-overlay icon over videos on YouTube and Vimeo.
-
-You can also launch Min Vid by right clicking on a video link and
-sending to the player from the context menu.
-
-<img src="docs/images/launching.gif">
-<br/>
-<img src="docs/images/dragging.gif">
-<br/>
 
 ## Development
 Contributions welcome. To get started,
