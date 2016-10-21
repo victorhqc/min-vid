@@ -56,7 +56,7 @@ video#video {
 .error {
     background-repeat: no-repeat;
     background-size: cover;
-    background: url('img/static.gif');
+    background: url('img/static.png');
     height: 100%;
 }
 
