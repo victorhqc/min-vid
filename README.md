@@ -53,5 +53,9 @@ Contributions welcome. To get started,
 
 For further information on contributing, see [contributing.md](./contributing.md)
 
+## Notes
+
+[data/img/loading-bars.svg](data/img/loading-bars.svg) is from https://github.com/jxnblk/loading
+
 ## LICENSE
 [Mozilla Public License 2.0](LICENSE)

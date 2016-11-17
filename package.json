@@ -29,7 +29,7 @@
     "package": "npm run build-script && jpm xpi && npm run mv-xpi",
     "mv-xpi": "mv min-vid.xpi dist/addon.xpi",
     "postpackage": "addons-linter dist/addon.xpi -o text",
-    "prepackage": "npm run locales && npm run lint && svgo data/img",
+    "prepackage": "npm run locales && npm run lint",
     "prepush": "npm run package",
     "dev": "npm run locales && npm run watch-script & npm run watch & http-server -c-1",
     "deploy": "npm run package && node ./bin/sign",
@@ -57,7 +57,6 @@
     "react": "15.1.0",
     "react-dom": "15.1.0",
     "react-tooltip": "3.0.13",
-    "svgo": "0.7.1",
     "uglify-js": "git://github.com/mishoo/UglifyJS2#b7bb7061503c247393bd0aa8ae9dd80167028a98",
     "watchify": "3.7.0"
   }
