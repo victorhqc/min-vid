@@ -1,3 +1,27 @@
+## 0.3.3 (2016-12-1)
+
+* [[`83c7144804`](https://github.com/meandave/min-vid/commit/83c7144804)] - bump deploy-txp to version with addon.env file (#517) (Dave Justice)
+* [[`efc046183b`](https://github.com/meandave/min-vid/commit/efc046183b)] - Save the window's location when it's minimized, maximized, or dropped (#511) (Jared Hirsch)
+* [[`ebbcdb0fa1`](https://github.com/meandave/min-vid/commit/ebbcdb0fa1)] - add build-addon.sh (#512) (Wil Clouser)
+* [[`464217b116`](https://github.com/meandave/min-vid/commit/464217b116)] - Change deployment method (#509) (Dave Justice)
+* [[`2bdd00bf77`](https://github.com/meandave/min-vid/commit/2bdd00bf77)] - Only fire one metrics event per error (#510) (Jared Hirsch)
+* [[`26c856108c`](https://github.com/meandave/min-vid/commit/26c856108c)] - Remove vine support (#504) (Dave Justice)
+* [[`ac4a59f23e`](https://github.com/meandave/min-vid/commit/ac4a59f23e)] - Localize context menu msg (#501) (Dave Justice)
+* [[`bb4561b967`](https://github.com/meandave/min-vid/commit/bb4561b967)] - fix availability metric to report on page view (#500) (Dave Justice)
+* [[`e9a0e859bc`](https://github.com/meandave/min-vid/commit/e9a0e859bc)] - fix loading animation (Dave Justice)
+* [[`1c00e27604`](https://github.com/meandave/min-vid/commit/1c00e27604)] - 497 draggable views (#498) (Jared Hirsch)
+* [[`7c01198817`](https://github.com/meandave/min-vid/commit/7c01198817)] - Make the player a topmost, draggable window (#475) (Jared Hirsch)
+* [[`327820920a`](https://github.com/meandave/min-vid/commit/327820920a)] - Add cross-env and fix some Windows issues w scripts (#486) (Peter deHaan)
+* [[`15da7648ba`](https://github.com/meandave/min-vid/commit/15da7648ba)] - Add support for pontoon and script for processing l10n files (#482) (Dave Justice)
+* [[`2b94a3ee5d`](https://github.com/meandave/min-vid/commit/2b94a3ee5d)] - Make 'Send to tab' send to the original tab, if open (#436) (Vicky Chijwani)
+* [[`e0d04268e2`](https://github.com/meandave/min-vid/commit/e0d04268e2)] - Remove usage of const in for loop for ff49 (#467) (Dave Justice)
+* [[`bbadbf51c9`](https://github.com/meandave/min-vid/commit/bbadbf51c9)] - Release 0.3.2 (#464) (Dave Justice)
+
+#### Pontoon changes
+Pontoon changes have been redacted for readability, the true commit
+log can be accessed in the
+[GitHub repo](https://github.com/meandavejustice/min-vid/commits/master).
+
 ## 0.3.2 (2016-10-24)
 
 * [[`4341c32e7e`](https://github.com/meandave/min-vid/commit/4341c32e7e)] - add L10N support (#458) (Dave Justice)
