@@ -26,8 +26,7 @@ class ProgressView extends React.Component {
     return (
         <div className={cn('progress', {hidden: this.props.minimized, peek: !this.props.hovered})}>
           <span className={cn('domain', {hidden: !this.props.hovered})}>{this.props.domain}</span>
-          <div className={cn('time', {pointer: this.props.player === 'audio',
-                                      hidden: !this.props.hovered})}
+          <div className={cn('time', {pointer: this.props.player === 'audio', hidden: !this.props.hovered})}
                onClick={this.timeClicked.bind(this)} data-tip
                data-for='switch-vis'>{this.props.time}</div>
           {tooltip}
