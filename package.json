@@ -25,7 +25,7 @@
   },
   "scripts": {
     "lint": "eslint . bin/*",
-    "build-script": "cross-env NODE_ENV=production browserify app.js -t [ babelify --presets [ react ] ] | uglifyjs -c > data/bundle.js",
+    "build-script": "cross-env NODE_ENV=production browserify app.js -t [ babelify --presets [ react ] ] > data/bundle.js",
     "watch-script": "cross-env NODE_ENV=development watchify app.js -o data/bundle.js -t [ babelify --presets [ react ] ]",
     "start": "npm run dev",
     "watch": "jpm watchpost --post-url http://localhost:8888",
@@ -64,7 +64,6 @@
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-tooltip": "3.2.2",
-    "uglify-js": "git://github.com/mishoo/UglifyJS2#b7bb7061503c247393bd0aa8ae9dd80167028a98",
     "watchify": "3.9.0"
   }
 }
