@@ -1,4 +1,17 @@
-## 0.3.4 (2017-3-13)
+#### Pontoon changes
+Pontoon changes have been redacted for readability, the true commit
+log can be accessed in the
+[GitHub repo](https://github.com/meandavejustice/min-vid/commits/master).
+
+## 0.3.6 (2017-4-13)
+
+* [[`8b790af39b`](https://github.com/meandave/min-vid/commit/8b790af39b)] - chore(package): update gl-waveform to version 2.4.3 (#734) (greenkeeper[bot])
+* [[`73e61f6f6c`](https://github.com/meandave/min-vid/commit/73e61f6f6c)] - Update dependencies for queue release (#733) (Dave Justice)
+* [[`6dc8fe224c`](https://github.com/meandave/min-vid/commit/6dc8fe224c)] - Queue support (#724) (Dave Justice)
+* [[`c6fd27f127`](https://github.com/meandave/min-vid/commit/c6fd27f127)] - fix(package): update testpilot-metrics to version 2.1.3 (#658) (greenkeeper[bot])
+* [[`25989f211f`](https://github.com/meandave/min-vid/commit/25989f211f)] - Release 0.3.5 (#651) (Dave Justice)
+
+## 0.3.5 (2017-3-13)
 
 * [[`5014ab742c`](https://github.com/meandave/min-vid/commit/5014ab742c)] - Better youtube error messaging (#602) (Dave Justice)
 * [[`38e7828a3e`](https://github.com/meandave/min-vid/commit/38e7828a3e)] - Fix replay view issue on audio tracks (#601) (Dave Justice)
@@ -60,11 +73,6 @@
 * [[`2b94a3ee5d`](https://github.com/meandavejustice/min-vid/commit/2b94a3ee5d)] - Make 'Send to tab' send to the original tab, if open (#436) (Vicky Chijwani)
 * [[`e0d04268e2`](https://github.com/meandavejustice/min-vid/commit/e0d04268e2)] - Remove usage of const in for loop for ff49 (#467) (Dave Justice)
 * [[`bbadbf51c9`](https://github.com/meandavejustice/min-vid/commit/bbadbf51c9)] - Release 0.3.2 (#464) (Dave Justice)
-
-#### Pontoon changes
-Pontoon changes have been redacted for readability, the true commit
-log can be accessed in the
-[GitHub repo](https://github.com/meandavejustice/min-vid/commits/master).
 
 ## 0.3.2 (2016-10-24)
 
