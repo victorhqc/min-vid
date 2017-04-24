@@ -234,7 +234,7 @@ function vimeoEmbedChecks() {
 }
 
 function getAction(ev) {
-  return (ev.target.className === 'minvid__overlay__icon') ? 'play' : 'add-to-queue';
+  return (ev.target.id === 'minvid__overlay__icon__play') ? 'play' : 'add-to-queue';
 }
 
 // General Helpers
@@ -245,12 +245,14 @@ function getTemplate() {
 
   containerEl.className = 'minvid__overlay__container';
   playIconEl.className = 'minvid__overlay__icon';
+  playIconEl.id = 'minvid__overlay__icon__play';
   playIconEl.title = window.strings.playNow;
-  addIconEl.className = 'minvid__overlay__icon__add';
+  addIconEl.className = 'minvid__overlay__icon';
+  addIconEl.id = 'minvid__overlay__icon__add';
   addIconEl.title = window.strings.add;
-
   containerEl.appendChild(playIconEl);
   containerEl.appendChild(addIconEl);
+
   return containerEl;
 }
 
