@@ -42,10 +42,11 @@ otherwise noted.
 
 * Object: `error_view`
   * method: `render`
-    * Sent when the error view is displayed (a video failed to load).
+    * Sent when the error view is displayed (a video failed to load). NB. There are a few reasons this might happen, but the resultant UI is the same.
 
 * Object: `loading_view`
   * method: `close`
+    * If user closes while min-vid player is fetching video content. Good measure to check if slow connections cause ppl to dump out.
 
 * Object: `player_view`
   * method: `video_loaded`
@@ -73,6 +74,7 @@ otherwise noted.
   * method: `launch:playlist:${action}`
     * Sent when playlist launched from overlay or context menu.
     * 'action' is either going to be 'send-to-queue' or 'play'
+    * If you're watching a playlist and you click the min vid overlay, it will give you a choice.
   * method: `launch:video:${action}`
     * Sent when playlist launched from overlay or context menu.
     * 'video' segment of method refers to individual videos launched, which are part of a playlist.
@@ -91,7 +93,7 @@ otherwise noted.
 * Object: `overlay_icon`
   * method: `available`
     * Sent when a video is available on a page.
-* Object: `overlay_icon`
+    * One call per page max (even if multiple videos)
   * method: `launch`
     * Sent when a video is launched from the overlay icon.
 
