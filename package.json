@@ -15,12 +15,12 @@
   "scripts": {
     "lint": "eslint -c .eslintrc.json .",
     "start": "npm run dev",
-    "watch-script": "onchange '**/*.js' -w -e 'dist/**/*.js' -e 'webextension/dist/**/*.js' -- npm run package",
+    "watch-script": "onchange '**/*.js' -w -e 'webextension/dist/**/*.js' -- npm run package",
     "copy:locales": "node ./bin/locales",
     "dev": "npm run copy:locales && npm run watch-script",
     "package": "webpack && ./bin/package-addon.sh",
     "prepackage": "npm run copy:locales && npm run lint",
-    "postpackage": "addons-linter dist/addon.xpi -o text",
+    "postpackage": "addons-linter addon.xpi -o text",
     "prepush": "npm run package",
     "deploy": "deploy-txp"
   },
@@ -54,7 +54,6 @@
     "react-player": "0.19.1",
     "react-tabs": "0.8.3",
     "react-tooltip": "3.3.0",
-    "rimraf": "2.6.1",
     "sortablejs": "1.6.0",
     "testpilot-ga": "0.3.0",
     "uuid": "3.1.0",
