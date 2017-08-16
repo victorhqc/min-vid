@@ -5,8 +5,12 @@
  * http://mozilla.org/MPL/2.0/.
  */
 
-var fs = require('fs');
-var archiver = require('archiver');
+const fs = require('fs');
+const rimraf = require('rimraf').sync;
+const archiver = require('archiver');
+
+rimraf('dist/');
+fs.mkdirSync('dist/');
 
 var output = fs.createWriteStream('dist/addon.xpi');
 var archive = archiver('zip', {
