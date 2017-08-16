@@ -1,0 +1,15 @@
+locales/**
+frontend/**
+webextension/lib/**
+webextension/background.js
+LICENSE
+Makefile
+dist/**
+webpack.config.js
+docs/**
+node_modules/**
+bin/**
+.git/**
+.*
+*.md
+index.html

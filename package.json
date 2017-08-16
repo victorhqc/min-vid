@@ -18,7 +18,7 @@
     "watch-script": "onchange '**/*.js' -w -e 'dist/**/*.js' -e 'webextension/dist/**/*.js' -- npm run package",
     "copy:locales": "node ./bin/locales",
     "dev": "npm run copy:locales && npm run watch-script",
-    "package": "webpack && make",
+    "package": "webpack && ./bin/package-addon.sh",
     "prepackage": "npm run copy:locales && npm run lint",
     "postpackage": "addons-linter dist/addon.xpi -o text",
     "prepush": "npm run package",
@@ -27,6 +27,7 @@
   "license": "MPL-2.0",
   "devDependencies": {
     "addons-linter": "0.20.0",
+    "archiver": "2.0.0",
     "audiosource": "3.0.3",
     "babel": "6.23.0",
     "babel-core": "6.25.0",
