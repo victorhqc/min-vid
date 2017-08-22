@@ -26,7 +26,7 @@
   },
   "license": "MPL-2.0",
   "devDependencies": {
-    "addons-linter": "0.22.8",
+    "addons-linter": "0.24.0",
     "archiver": "2.0.0",
     "audiosource": "3.0.3",
     "babel": "6.23.0",
