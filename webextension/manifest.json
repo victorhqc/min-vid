@@ -11,7 +11,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content-scripts/icon-overlay.js"],
-      "css": ["content-scripts/icon-overlay.css"]
+      "css": ["content-scripts/icon-overlay.css"],
+      "all_frames": true
     }
   ],
   "options_ui": {
