@@ -410,7 +410,7 @@ function injectStyle() {
   position: absolute;
   bottom: 0;
   width: 100%;
-  z-index: 999999;
+  z-index: 1000;
 }
 
 .minvid__overlay__container {
@@ -427,7 +427,7 @@ function injectStyle() {
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: 999999;
+    z-index: 1000;
 }
 
 .minvid__overlay__container:hover,
