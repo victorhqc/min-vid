@@ -3,6 +3,23 @@ Pontoon changes have been redacted for readability, the true commit
 log can be accessed in the
 [GitHub repo](https://github.com/meandavejusticejustice/min-vid/commits/master).
 
+## 0.4.5 (2017-9-25)
+* [[`938a1cbf8e`](https://github.com/meandave/min-vid/commit/938a1cbf8e)] - fix z-index issue for overlay icons on new yt ui (#1066) (Dave Justice)
+* [[`d0ed380fa6`](https://github.com/meandave/min-vid/commit/d0ed380fa6)] - update config option for react-player (#1065) (Dave Justice)
+* [[`0387334a5d`](https://github.com/meandave/min-vid/commit/0387334a5d)] - fix fullscreen hiding overlay icon (#1064) (Dave Justice)
+* [[`c5fbfbad94`](https://github.com/meandave/min-vid/commit/c5fbfbad94)] - Update dependencies for 0.4.5 (#1061) (Dave Justice)
+* [[`509c17be13`](https://github.com/meandave/min-vid/commit/509c17be13)] - fix replay stutter regression (#1059) (Dave Justice)
+* [[`7822f3ba4c`](https://github.com/meandave/min-vid/commit/7822f3ba4c)] - Only inject style when valid embed is on page (#1056) (Dave Justice)
+* [[`b94a9d4c52`](https://github.com/meandave/min-vid/commit/b94a9d4c52)] - add overlay to featured channel videos on new yt ui (#1057) (Dave Justice)
+* [[`249c0d43c7`](https://github.com/meandave/min-vid/commit/249c0d43c7)] - fix overlay-icon on playlists (#1053) (Dave Justice)
+* [[`f358281ba0`](https://github.com/meandave/min-vid/commit/f358281ba0)] - Fix passing of youtube error messages (#1050) (Dave Justice)
+* [[`eb376ab790`](https://github.com/meandave/min-vid/commit/eb376ab790)] - support more with vendor prefix call on fullscreen change (#1052) (Dave Justice)
+* [[`c6c2bd2ac1`](https://github.com/meandave/min-vid/commit/c6c2bd2ac1)] - Update docs to reflect webext conversion (#1051) (Dave Justice)
+* [[`7d2ced07e2`](https://github.com/meandave/min-vid/commit/7d2ced07e2)] - chore(package): update webpack to version 3.6.0 (#1045) (greenkeeper[bot])
+* [[`ef62a10c7c`](https://github.com/meandave/min-vid/commit/ef62a10c7c)] - chore(package): update babel-eslint to version 8.0.0 (#1038) (greenkeeper[bot])
+* [[`07c8b916a1`](https://github.com/meandave/min-vid/commit/07c8b916a1)] - add category to metrics ping (#1044) (Dave Justice)
+* [[`17a53d1819`](https://github.com/meandave/min-vid/commit/17a53d1819)] - Release 0.4.4 (#1040) (Dave Justice)
+
 ## 0.4.4 (2017-9-12)
 * [[`703bc42bbc`](https://github.com/meandavejustice/min-vid/commit/703bc42bbc)] - Fix icons showing through queue panel (#1034) (Dave Justice)
 * [[`f9f512be85`](https://github.com/meandavejustice/min-vid/commit/f9f512be85)] - hide overlay icon when in fullscreen mode (#1033) (Dave Justice)
