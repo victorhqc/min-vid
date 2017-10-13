@@ -93,7 +93,7 @@ export default class Player extends React.Component {
   }
 
   onPause() {
-    sendMetricsEvent('player_view', 'pause'), this.props.queue[0].domain;
+    sendMetricsEvent('player_view', 'pause', this.props.queue[0].domain);
     window.AppData.set({playing: false});
   }
 
@@ -279,7 +279,7 @@ export default class Player extends React.Component {
                         onProgress={this.onProgress.bind(this)}
                         onReady={this.onLoaded.bind(this)}
                         onDuration={(d) => window.AppData.set({duration: d})}
-                        youtubeConfig={{'playerVars': {'cc_load_policy': this.props.queue[0].cc, disablekb: 1}}}
+                        config={{'youtube': {'playerVars': {'cc_load_policy': this.props.queue[0].cc, disablekb: 1}}}}
                         progressFrequency={100}
                         onError={this.onError.bind(this)}
                         onEnded={this.onEnded.bind(this)} />;
@@ -312,6 +312,7 @@ export default class Player extends React.Component {
                                               </div>) : (<MinimizedControls {...this.props} progress={this.state.progress}
                                                                             nextTrack={this.nextTrack.bind(this)}
                                                                             openQueueMenu={this.openQueueMenu.bind(this)}
+                                                                            replay={this.replay.bind(this)}
                                                                             time={this.state.time} audio={this.audio}
                                                                             setTime={this.setTime.bind(this)}
                                                                             hovered={this.state.hovered} />);

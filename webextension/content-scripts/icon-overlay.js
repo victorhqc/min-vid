@@ -3,9 +3,18 @@ let availableMetricSent = false;
 
 browser.runtime.onMessage.addListener(onMessage);
 
-injectStyle();
 checkForEmbeds();
 const overlayCheckInterval = setInterval(checkForEmbeds, 3000);
+
+function onFullscreenChange() {
+  const el = document.querySelector('.minvid__overlay__container');
+
+  if (document.mozFullScreen) el.classList.add('fullscreen');
+  else el.classList.remove('fullscreen');
+}
+
+document.addEventListener('fullscreenchange', onFullscreenChange);
+document.addEventListener('mozfullscreenchange', onFullscreenChange);
 
 function onMessage(opts) {
   const title = opts.title;
@@ -26,8 +35,33 @@ function removeOverlay(el) {
 
 function checkForEmbeds() {
   ytEmbedChecks();
+  newYtEmbedChecks();
   vimeoEmbedChecks();
   soundcloudEmbedChecks();
+}
+
+// New Youtube Page
+function newYtEmbedChecks() {
+  // Youtube Home Page
+  const ytNewHomeContainers = Array.from(document.querySelectorAll('#contents ytd-thumbnail'));
+  if (ytNewHomeContainers.length) {
+    sendMetric('available');
+    ytNewHomeContainers.forEach(ytHomePageHandler);
+  }
+
+  // Youtube Page related videos
+  const ytNewRelatedContainers = Array.from(document.querySelectorAll('#items ytd-thumbnail'));
+  if (ytNewRelatedContainers.length) {
+    sendMetric('available');
+    ytNewRelatedContainers.forEach(ytHomePageHandler);
+  }
+
+  // Youtube playlists
+  const ytNewPlaylistContainers = Array.from(document.querySelectorAll('ytd-playlist-thumbnail'));
+  if (ytNewPlaylistContainers.length) {
+    sendMetric('available');
+    ytNewPlaylistContainers.forEach(ytHomePageHandler);
+  }
 }
 
 function ytEmbedChecks() {
@@ -45,11 +79,11 @@ function ytEmbedChecks() {
     ytSearchContainers.forEach(ytHomePageHandler);
   }
 
-  // YouTube Watch Page
-  const ytWatchContainer = document.querySelector('.html5-video-player');
-  if (ytWatchContainer) {
+  // YouTube Watch Page and main featured videos on channel page
+  const ytWatchContainers = document.querySelectorAll('.html5-video-player');
+  if (ytWatchContainers) {
     sendMetric('available');
-    ytWatchElementHandler(ytWatchContainer);
+    ytWatchContainers.forEach(ytWatchElementHandler);
   }
 
   // YouTube Watch Page related videos
@@ -71,22 +105,28 @@ function ytEmbedChecks() {
     sendMetric('available');
     ytChannelUploadsContainers.forEach(ytHomePageHandler);
   }
+
+  // Youtube Gaming Home Page
+  const ytGamingContainers = Array.from(document.querySelectorAll('#contents .game-cell-contents'));
+  if (ytGamingContainers.length) {
+    sendMetric('available');
+    ytGamingContainers.forEach(function ytGamingWrapper(el) {
+      ytGamingHandler(el, { type: 'ytGamingHomePage' });
+    });
+  }
+
+  // Youtube Gaming Home Page Carousel
+  const ytGamingCarouselContainers = Array.from(document.querySelectorAll('#container.ytg-video-carousel .video-cell'));
+  if (ytGamingCarouselContainers.length) {
+    sendMetric('available');
+    ytGamingCarouselContainers.forEach(function ytGamingCarouselWrapper(el) {
+      ytGamingHandler(el, { type: 'ytGamingCarousel' });
+    });
+  }
 }
 
-function ytHomePageHandler(el) {
-  if (el.classList.contains('minvid__overlay__wrapper')) return;
-
-  const urlEl = el.querySelector('.yt-uix-sessionlink');
-
-  if (!urlEl || !urlEl.getAttribute('href')) return;
-
-  const url = urlEl.getAttribute('href');
-
-  if (!url.startsWith('/watch')) return;
-
-  el.classList.add('minvid__overlay__wrapper');
-  const tmp = getTemplate();
-  tmp.addEventListener('click', function(ev) {
+function registerClick({ el, url }) {
+  return function(ev) {
     evNoop(ev);
     browser.runtime.sendMessage({
       title: 'launch',
@@ -94,7 +134,54 @@ function ytHomePageHandler(el) {
       domain: 'youtube.com',
       action: getAction(ev)
     });
-  });
+  };
+}
+
+function updateClickIfNeeded(el, { url, props }) {
+  const targetClassName = `minvid__url__${url.replace('?', '')}`;
+
+  // Element has the correct `URL`.
+  if (el.classList.contains(targetClassName)) {
+    return;
+  }
+
+  // Updates the `minvid__url__` className with new `url`
+  const regExp = new RegExp('minvid__url__', 'g');
+  const updatedClassName = el.className.split(' ').map(className => {
+    if (!className.match(regExp)) {
+      return className;
+    }
+
+    return targetClassName;
+  }).join(' ');
+  el.className = updatedClassName;
+
+  // Reassign `eventListener` with new URL
+  const tmp = getTemplate();
+  tmp.addEventListener('click', registerClick({ el, url }));
+  el.appendChild(tmp);
+}
+
+function ytHomePageHandler(el) {
+  const urlEl = el.querySelector('.yt-uix-sessionlink')
+    || el.querySelector('.ytd-playlist-thumbnail')
+    || el.querySelector('.ytd-thumbnail');
+
+  if (!urlEl || !urlEl.getAttribute('href')) return;
+
+  const url = urlEl.getAttribute('href');
+
+  if (!url.startsWith('/watch')) return;
+
+  if (el.classList.contains('minvid__overlay__wrapper')) {
+    updateClickIfNeeded(el, { url });
+    return;
+  }
+
+  el.classList.add('minvid__overlay__wrapper');
+  el.classList.add(`minvid__url__${url.replace('?', '')}`);
+  const tmp = getTemplate();
+  tmp.addEventListener('click', registerClick({ el, url }));
   el.appendChild(tmp);
 }
 
@@ -122,6 +209,41 @@ function ytWatchElementHandler(el) {
       options.muted = videoEl.muted;
     }
     browser.runtime.sendMessage(options);
+  });
+  el.appendChild(tmp);
+}
+
+function ytGamingHandler(el, props) {
+  if (el.classList.contains('minvid__overlay__wrapper')) return;
+
+  if (el.contains(el.querySelector('.minvid__overlay__bottom_container'))) {
+    el.classList.add('minvid__overlay__wrapper');
+    return;
+  }
+
+  const urlEl = el.querySelector('.ytg-nav-endpoint');
+
+  if (!urlEl || !urlEl.getAttribute('href')) return;
+
+  const url = urlEl.getAttribute('href');
+
+  if (!url.startsWith('/watch')) return;
+
+  if (props.type === 'ytGamingHomePage') {
+    // Fixes for Youtube Gaming
+    el.style.position = 'relative';
+  }
+
+  el.classList.add('minvid__overlay__wrapper');
+  const tmp = getTemplate(props);
+  tmp.addEventListener('click', function(ev) {
+    evNoop(ev);
+    browser.runtime.sendMessage({
+      title: 'launch',
+      url: 'https://youtube.com' + url,
+      domain: 'youtube.com',
+      action: getAction(ev)
+    });
   });
   el.appendChild(tmp);
 }
@@ -255,13 +377,21 @@ function getAction(ev) {
   return (ev.target.id === 'minvid__overlay__icon__play') ? 'play' : 'add-to-queue';
 }
 
+function getContainerClass(props) {
+  switch (props.type) {
+  case 'ytGamingCarousel': return 'minvid__overlay__bottom_container';
+  default: return 'minvid__overlay__container';
+  }
+}
+
 // General Helpers
-function getTemplate() {
+function getTemplate(props) {
+  props = props || {};
   const containerEl = document.createElement('div');
   const playIconEl = document.createElement('div');
   const addIconEl = document.createElement('div');
 
-  containerEl.className = 'minvid__overlay__container';
+  containerEl.className = getContainerClass(props);
   playIconEl.className = 'minvid__overlay__icon';
   playIconEl.id = 'minvid__overlay__icon__play';
   playIconEl.title = browser.i18n.getMessage('play_now');
@@ -282,6 +412,8 @@ function sendMetric(method) {
     object: 'overlay_icon',
     method
   });
+  // only inject style if there are valid embeds on the page.
+  injectStyle();
 }
 
 function evNoop(ev) {
@@ -297,6 +429,23 @@ function closeFullscreen() {
 
 function injectStyle() {
   const css = `
+.minvid__overlay__bottom_container {
+  align-items: center;
+  background-color: rgba(0,0,0,0.8);
+  opacity: 0;
+  border-radius: 0 0 4px 4px;
+  height: 100%;
+  justify-content: center;
+  left: 4%;
+  max-height: 80px;
+  max-width: 36px;
+  padding: 2px 2px 4px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 .minvid__overlay__container {
     align-items: center;
     background-color: rgba(0,0,0,0.8);
@@ -311,10 +460,11 @@ function injectStyle() {
     position: absolute;
     top: 0;
     width: 100%;
-    z-index: 999999;
+    z-index: 1000;
 }
 
-.minvid__overlay__container:hover {
+.minvid__overlay__container:hover,
+.minvid__overlay__bottom_container:hover {
     background: rgba(0,0,0,0.9);
 }
 
@@ -339,7 +489,8 @@ function injectStyle() {
   margin-top: 5px;
 }
 
-.minvid__overlay__wrapper:hover .minvid__overlay__container {
+.minvid__overlay__wrapper:hover .minvid__overlay__container,
+.minvid__overlay__wrapper:hover .minvid__overlay__bottom_container {
     opacity: 1;
     /*background-color: rgba(0, 0, 0, .8);*/
     /*animation-name: fade;
@@ -353,12 +504,17 @@ function injectStyle() {
     opacity: 1;
 }
 
+.minvid__overlay__container.fullscreen {
+  display: none;
+}
+
 @keyframes fade {
   0%   {opacity: 0}
   5%, 80% {opacity: 1}
   100% {opacity: 0}
 }
-  `;
+
+`;
 
   const head = document.head;
   const style = document.createElement('style');
